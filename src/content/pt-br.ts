@@ -274,11 +274,11 @@ const content = {
   },
 
   lancamento: {
-    titulo: '⏳ Preço especial de lançamento',
-    // montado com os valores do config — nunca editar preços aqui
-    texto: (v: { mirim: string; mega: string; data: string; depoisMirim: string; depoisMega: string }) =>
-      `Os preços de ${v.mirim} e ${v.mega} valem até ${v.data} (horário de Brasília). Depois disso, os kits passam a custar ${v.depoisMirim} e ${v.depoisMega}.`,
-    unidades: ['dias', 'horas', 'min', 'seg'],
+    titulo: '⏳ Oferta de lançamento — por tempo limitado',
+    // montado com o menor preço real do config — nunca editar o valor aqui
+    texto: (v: { preco: string }) =>
+      `Os preços especiais a partir de ${v.preco} são válidos somente durante o período de lançamento. Após essa data, os kits voltam ao preço original. Não deixe para depois!`,
+    unidades: ['horas', 'min', 'seg'],
     cta: 'Aproveitar o preço de lançamento →',
     encerrado: 'O período de lançamento terminou.',
   },

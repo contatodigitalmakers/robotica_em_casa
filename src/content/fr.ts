@@ -262,10 +262,10 @@ const content = {
   },
 
   lancamento: {
-    titulo: '⏳ Prix spécial de lancement',
+    titulo: '⏳ Offre de lancement — pour une durée limitée',
     texto: (v) =>
-      `Les prix de ${v.mirim} et ${v.mega} sont valables jusqu’au ${v.data} (heure de Brasília). Ensuite, les kits passeront à ${v.depoisMirim} et ${v.depoisMega}.`,
-    unidades: ['jours', 'heures', 'min', 's'],
+      `Les prix spéciaux à partir de ${v.preco} ne sont valables que pendant la période de lancement. Après cette date, les kits reviennent au prix d’origine. Ne remettez pas à plus tard.`,
+    unidades: ['heures', 'min', 'sec'],
     cta: 'Profiter du prix de lancement →',
     encerrado: 'La période de lancement est terminée.',
   },

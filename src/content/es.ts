@@ -262,10 +262,10 @@ const content = {
   },
 
   lancamento: {
-    titulo: '⏳ Precio especial de lanzamiento',
+    titulo: '⏳ Oferta de lanzamiento — por tiempo limitado',
     texto: (v) =>
-      `Los precios de ${v.mirim} y ${v.mega} valen hasta el ${v.data} (hora de Brasilia). Después, los kits pasarán a costar ${v.depoisMirim} y ${v.depoisMega}.`,
-    unidades: ['días', 'horas', 'min', 'seg'],
+      `Los precios especiales desde ${v.preco} solo son válidos durante el período de lanzamiento. Después de esa fecha, los kits vuelven al precio original. No lo dejen para después.`,
+    unidades: ['horas', 'min', 'seg'],
     cta: 'Aprovechar el precio de lanzamiento →',
     encerrado: 'El período de lanzamiento terminó.',
   },
