@@ -95,11 +95,6 @@ const locale = Astro.currentLocale;
     }
   }
 
-  /* enquanto o banner de cookies estiver visível, a barra espera */
-  :global(body.consent-pendente) .sticky-cta {
-    transform: translateY(110%);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .sticky-cta {
       transition: none;

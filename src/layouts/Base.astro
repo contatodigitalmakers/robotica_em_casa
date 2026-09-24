@@ -39,6 +39,7 @@ const organization = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href="/fonts/nunito-latin-var.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -47,9 +48,6 @@ const organization = {
     ))}
     <link rel="alternate" hreflang="x-default" href={xDefault} />
     <meta name="theme-color" content="#1F2A44" />
-
-    <!-- fonte: 1 arquivo woff2 auto-hospedado, pré-carregado -->
-    <link rel="preload" href="/fonts/nunito-latin-var.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- checkout: resolve DNS cedo, sem conexão completa -->
     <link rel="dns-prefetch" href="https://pay.hotmart.com" />

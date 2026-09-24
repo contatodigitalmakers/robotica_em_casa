@@ -55,11 +55,12 @@ const faixas = [0, 1] as const;
     <p>{c.texto}</p>
   </div>
 
-  <div class="marquee" data-gallery>
+  <div class="marquee" data-gallery data-defer-marquee>
+    <template>
     <div class="marquee__track">
       {faixas.map((faixa) => (
         <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
-          {paginas.map((p, i) => (
+          {paginas.map((p) => (
             <li>
               <button
                 type="button"
@@ -79,7 +80,8 @@ const faixas = [0, 1] as const;
                   alt={p.alt}
                   width={500}
                   height={667}
-                  loading={faixa === 0 && i < 4 ? 'eager' : 'lazy'}
+                  loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                 />
               </button>
@@ -89,6 +91,7 @@ const faixas = [0, 1] as const;
         </ul>
       ))}
     </div>
+    </template>
 
     <dialog class="lightbox" data-lightbox aria-label={c.fechar}>
       <button type="button" class="lightbox__close" data-close aria-label={c.fechar}>
@@ -125,6 +128,7 @@ const faixas = [0, 1] as const;
   .marquee {
     margin-top: 8px;
     overflow: hidden;
+    min-height: calc((clamp(210px, 68vw, 270px) - 16px) * 1.334 + 108px);
     padding: 28px 0 4px;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);

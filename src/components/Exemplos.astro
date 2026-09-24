@@ -28,7 +28,8 @@ const faixas = [0, 1] as const;
     <p>{c.texto}</p>
   </div>
 
-  <div class="marquee">
+  <div class="marquee" data-defer-marquee>
+    <template>
     <div class="marquee__track">
       {faixas.map((faixa) => (
         <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
@@ -44,7 +45,8 @@ const faixas = [0, 1] as const;
                   alt={faixa === 1 ? '' : c.alts[i]}
                   width={f.width}
                   height={f.height}
-                  loading={faixa === 0 && i < 3 ? 'eager' : 'lazy'}
+                  loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                 />
               </figure>
@@ -53,6 +55,7 @@ const faixas = [0, 1] as const;
         </ul>
       ))}
     </div>
+    </template>
   </div>
 
   <p class="container exemplos__legenda">{c.legenda}</p>
@@ -78,6 +81,7 @@ const faixas = [0, 1] as const;
   .marquee {
     margin-top: 8px;
     overflow: hidden;
+    min-height: calc(clamp(230px, 58vw, 340px) + 44px);
     padding: 28px 0 8px;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);

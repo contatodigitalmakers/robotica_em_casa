@@ -23,14 +23,16 @@ function initGallery(root: HTMLElement) {
   const caption = dialog.querySelector('.lightbox__caption');
   if (!img) return;
 
-  root.querySelectorAll<HTMLButtonElement>('[data-full]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      // a imagem ampliada só é carregada ao abrir
-      img.src = btn.dataset.full || '';
-      img.alt = btn.querySelector('img')?.alt || '';
-      if (caption) caption.textContent = btn.dataset.caption || '';
-      dialog.showModal();
-    });
+  // delegação: os botões nascem depois, quando o carrossel sai do <template>
+  root.addEventListener('click', (event) => {
+    const alvo = event.target;
+    if (!(alvo instanceof Element)) return;
+    const btn = alvo.closest<HTMLButtonElement>('[data-full]');
+    if (!btn) return;
+    img.src = btn.dataset.full || '';
+    img.alt = btn.querySelector('img')?.alt || '';
+    if (caption) caption.textContent = btn.dataset.caption || '';
+    dialog.showModal();
   });
 
   dialog.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());

@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import Pill from './Pill.astro';
 import Button from './Button.astro';
 import type { Content } from '../content';
-import mascote from '../assets/img/mascote.png';
+import logo from '../assets/img/logo.png';
 
 interface Props {
   c: Content['hero'];
@@ -23,15 +23,14 @@ const { c } = Astro.props;
   <div class="container hero__inner">
     <div class="hero__selo">
       <Picture
-        src={mascote}
-        widths={[96, 192]}
-        sizes="96px"
+        src={logo}
+        widths={[132, 264]}
+        sizes="132px"
         formats={['avif', 'webp']}
         alt={c.mascoteAlt}
         width={1024}
         height={1024}
         loading="eager"
-        fetchpriority="high"
         decoding="async"
       />
     </div>

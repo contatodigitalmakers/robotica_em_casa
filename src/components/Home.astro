@@ -16,7 +16,6 @@ import Faq from './Faq.astro';
 import CtaFinal from './CtaFinal.astro';
 import Footer from './Footer.astro';
 import StickyCta from './StickyCta.astro';
-import CookieBanner from './CookieBanner.astro';
 
 const c = getContent(Astro.currentLocale);
 ---
@@ -39,7 +38,6 @@ const c = getContent(Astro.currentLocale);
   </main>
   <Footer c={c.footer} a11y={c.a11y} />
   <StickyCta c={c.sticky} />
-  <CookieBanner c={c.cookies} a11y={c.a11y} />
 
   <script>
     import '../scripts/site';
