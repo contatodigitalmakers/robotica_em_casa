@@ -1,0 +1,147 @@
+---
+import { Picture } from 'astro:assets';
+import Pill from './Pill.astro';
+import { site } from '../config/site';
+import type { Content } from '../content';
+import depoimento1 from '../assets/img/depoimento-1.jpg';
+import depoimento2 from '../assets/img/depoimento-2.jpg';
+import depoimento3 from '../assets/img/depoimento-3.jpg';
+import depoimento4 from '../assets/img/depoimento-4.jpg';
+
+interface Props {
+  c: Content['depoimentos'];
+}
+
+const { c } = Astro.props;
+const prints = [
+  { src: depoimento1, w: 576, h: 1024 },
+  { src: depoimento2, w: 460, h: 1024 },
+  { src: depoimento3, w: 520, h: 1024 },
+  { src: depoimento4, w: 576, h: 1024 },
+];
+const faixas = [0, 1] as const;
+---
+
+{/* Seção inteira condicional: só renderiza com depoimentos.ativo === true */}
+{site.depoimentos.ativo && (
+  <section class="section depoimentos" id="depoimentos" aria-labelledby="t-depoimentos">
+    <div class="container depoimentos__head">
+      <Pill emoji={c.pillEmoji} label={c.pill} tone="green" />
+      <h2 id="t-depoimentos">{c.titulo}</h2>
+      <p>{c.texto}</p>
+    </div>
+
+    <div class="marquee">
+      <div class="marquee__track">
+        {faixas.map((faixa) => (
+          <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
+            {prints.map((p, i) => (
+              <li>
+                <div class="phone">
+                  <Picture
+                    src={p.src}
+                    widths={[280, 560]}
+                    sizes="240px"
+                    formats={['avif', 'webp']}
+                    alt={faixa === 1 ? '' : c.alts[i]}
+                    width={p.w}
+                    height={p.h}
+                    loading={faixa === 0 && i < 2 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .depoimentos {
+    background: var(--cream);
+    overflow: clip;
+  }
+
+  .depoimentos__head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 760px;
+  }
+
+  .depoimentos__head p {
+    color: var(--text-muted);
+  }
+
+  .marquee {
+    margin-top: 8px;
+    overflow: hidden;
+    padding: 12px 0 4px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: depoimentos-loop 48s linear infinite;
+  }
+
+  .marquee:hover .marquee__track,
+  .marquee:focus-within .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    margin: 0;
+    padding: 0 22px 0 0;
+    list-style: none;
+  }
+
+  /* moldura de celular em CSS puro (sem imagem de mockup) */
+  .phone {
+    width: 220px;
+    border: 10px solid var(--navy);
+    border-radius: 36px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .phone img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @keyframes depoimentos-loop {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .marquee__track {
+      animation: none;
+    }
+
+    .marquee__row[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

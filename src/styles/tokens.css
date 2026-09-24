@@ -1,0 +1,53 @@
+/* TOKENS DO DESIGN SYSTEM — Robótica em Casa */
+:root {
+  /* cores principais */
+  --kraft: #c8a27a;
+  --kraft-light: #e9d6bf;
+  --yellow: #ffc93c;
+  --orange: #ff8a3d;
+  --orange-text: #c8540f; /* laranja escuro para TEXTO sobre fundo claro (AA) */
+  --blue: #3da5d9;
+  --green: #5bbf72;
+  --pink: #ff6f7d;
+  --navy: #1f2a44;
+  --navy-2: #26345a; /* cards sobre fundo navy */
+  --navy-3: #16203a; /* footer */
+  --cream: #fff8ec;
+  --cream-2: #fdf1dc;
+  --white: #ffffff;
+  --text: #1f2a44;
+  --text-muted: #55607a;
+  --text-on-dark: #f5f1e8;
+  --text-on-dark-muted: #c3c9d8;
+
+  /* tints claros (fundos de pill/selo) + textos escuros acessíveis (AA ≥ 4.5) */
+  --yellow-tint: #fff3d0;
+  --blue-tint: #e3f2fb;
+  --blue-dark: #166a96;
+  --green-tint: #e6f6ea;
+  --green-dark: #256b38;
+  --green-card: #eefaf1;
+  --orange-tint: #ffebdd;
+  --orange-dark: #a8430a;
+  --pink-tint: #ffe7ea;
+  --pink-dark: #c22740;
+  --navy-tint: #e8ecf5;
+
+  /* sombra do botão "de brinquedo" */
+  --orange-shadow: #d96a22;
+
+  /* forma */
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --radius-img: 18px;
+  --shadow-soft: 0 10px 30px rgba(31, 42, 68, 0.08);
+  --shadow-lift: 0 18px 44px rgba(31, 42, 68, 0.14);
+
+  /* layout */
+  --container: 1120px;
+  --section-pad: clamp(56px, 9vw, 112px);
+  --header-h: 64px;
+
+  /* tipografia */
+  --font: 'Nunito', 'Nunito Fallback', Arial, sans-serif;
+}

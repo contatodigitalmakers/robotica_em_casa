@@ -1,0 +1,146 @@
+---
+import { Picture } from 'astro:assets';
+import type { Content } from '../content';
+import { localeHref, locales } from '../lib/locales';
+import logo from '../assets/img/logo.png';
+
+interface Props {
+  c: Content['footer'];
+  a11y: Content['a11y'];
+}
+
+const { c, a11y } = Astro.props;
+const atual = Astro.currentLocale ?? 'pt-br';
+---
+
+<footer class="footer" data-footer>
+  <div class="container footer__inner">
+    <a href="#topo" class="footer__logo" aria-label={c.logoAlt}>
+      <Picture
+        src={logo}
+        widths={[110, 220]}
+        sizes="110px"
+        formats={['avif', 'webp']}
+        alt=""
+        width={1024}
+        height={1024}
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+
+    <p class="footer__linha">{c.copyright}</p>
+    <p class="footer__linha">{c.suporte}</p>
+
+    <nav class="footer__nav" aria-label={a11y.linksLegais}>
+      {c.links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <nav class="footer__idiomas" aria-label={a11y.idiomas}>
+      {locales.map((l) => (
+        <a
+          href={localeHref(l.code, Astro.url.pathname)}
+          hreflang={l.hreflang}
+          lang={l.htmlLang}
+          aria-current={l.code === atual ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <p class="footer__linha">{c.hotmart}</p>
+    <p class="footer__aviso">{c.aviso}</p>
+    <p class="footer__meta">{c.meta}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--navy-3);
+    color: var(--text-on-dark-muted);
+    padding: clamp(36px, 6vw, 56px) 0 calc(clamp(36px, 6vw, 56px) + 0px);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .footer__logo img {
+    height: 88px;
+    width: auto;
+    border-radius: 16px;
+  }
+
+  .footer__linha {
+    font-size: 0.85rem;
+    max-width: 640px;
+  }
+
+  .footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 22px;
+  }
+
+  .footer__nav a {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-on-dark);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: rgba(245, 241, 232, 0.35);
+    padding: 8px 0;
+  }
+
+  .footer__nav a:hover {
+    text-decoration-color: var(--yellow);
+  }
+
+  .footer__idiomas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .footer__idiomas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid rgba(245, 241, 232, 0.35);
+    color: var(--text-on-dark);
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .footer__idiomas a[aria-current='page'] {
+    background: var(--yellow);
+    color: var(--navy);
+    border-color: var(--yellow);
+  }
+
+  .footer__idiomas a:hover {
+    border-color: var(--yellow);
+  }
+
+  .footer__aviso,
+  .footer__meta {
+    font-size: 0.78rem;
+    max-width: 680px;
+    opacity: 0.85;
+  }
+</style>

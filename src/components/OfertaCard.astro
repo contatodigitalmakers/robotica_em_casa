@@ -1,0 +1,252 @@
+---
+import { Picture } from 'astro:assets';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { site } from '../config/site';
+import { formatEUR } from '../lib/format';
+import type { Content } from '../content';
+import mockupMirim from '../assets/img/mockup-mirim.png';
+import mockupMirimEn from '../assets/img/mockup-mirim-en.png';
+import mockupMirimFr from '../assets/img/mockup-mirim-fr.png';
+import mockupMirimEs from '../assets/img/mockup-mirim-es.png';
+import mockupMirimIt from '../assets/img/mockup-mirim-it.png';
+import mockupMega from '../assets/img/mockup-mega.png';
+import mockupMegaEn from '../assets/img/mockup-mega-en.png';
+import mockupMegaFr from '../assets/img/mockup-mega-fr.png';
+import mockupMegaEs from '../assets/img/mockup-mega-es.png';
+import mockupMegaIt from '../assets/img/mockup-mega-it.png';
+
+interface Props {
+  variante: 'mirim' | 'mega';
+  c: Content['ofertas'];
+}
+
+const { variante, c } = Astro.props;
+const locale = Astro.currentLocale;
+const dados = variante === 'mirim' ? c.mirim : c.mega;
+const preco = site.precos[variante];
+const checkout = site.checkout[variante];
+const capasMirim = { en: mockupMirimEn, fr: mockupMirimFr, es: mockupMirimEs, it: mockupMirimIt };
+const capasMega = { en: mockupMegaEn, fr: mockupMegaFr, es: mockupMegaEs, it: mockupMegaIt };
+const capas = variante === 'mirim' ? capasMirim : capasMega;
+const mockup =
+  (locale && locale in capas ? capas[locale as keyof typeof capas] : undefined) ??
+  (variante === 'mirim' ? mockupMirim : mockupMega);
+
+// ícone por item: mirim usa check azul; mega usa o ícone da categoria
+const coresMega: Record<string, string> = {
+  robot: 'var(--blue-dark)',
+  recycle: 'var(--green-dark)',
+  flask: 'var(--orange-dark)',
+  scissors: 'var(--pink-dark)',
+  search: 'var(--navy)',
+  check: 'var(--green-dark)',
+};
+---
+
+<article class:list={['oferta-card', `oferta-card--${variante}`]}>
+  {variante === 'mega' && <span class="oferta-card__selo">{c.mega.selo}</span>}
+
+  <Picture
+    src={mockup}
+    widths={[320, 640]}
+    sizes="(min-width: 900px) 400px, 84vw"
+    formats={['avif', 'webp']}
+    alt={dados.mockupAlt}
+    width={400}
+    height={300}
+    loading="lazy"
+    decoding="async"
+  />
+
+  <h3 class="oferta-card__titulo">{dados.titulo}</h3>
+  <p class="oferta-card__sub">{dados.subtitulo}</p>
+
+  <ul class="oferta-card__itens" role="list">
+    {dados.itens.map((item) => {
+      const icone = variante === 'mirim' ? 'check' : (item as { icone?: string }).icone ?? 'check';
+      const cor = variante === 'mirim' ? 'var(--blue-dark)' : coresMega[icone];
+      return (
+        <li>
+          <span class="oferta-card__icone" style={`color: ${cor}`}>
+            <Icon name={icone as 'check'} size={20} />
+          </span>
+          <span>
+            {item.pre}<strong>{item.destaque}</strong>{item.pos}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+
+  <div class="oferta-card__preco">
+    {/* Regras de conformidade: preço riscado só com preço anterior REAL;
+        senão, valor separado; senão, só o preço atual. */}
+    {'anteriorReal' in preco && preco.anteriorReal !== null && (
+      <p class="preco__de">
+        {c.de} <s>{formatEUR(preco.anteriorReal, locale)}</s> {c.por}
+      </p>
+    )}
+    {variante === 'mega' &&
+      site.precos.mega.anteriorReal === null &&
+      site.precos.mega.valorSeparado !== null && (
+        <p class="preco__separado">
+          {c.valorSeparado} <s>{formatEUR(site.precos.mega.valorSeparado, locale)}</s>
+        </p>
+      )}
+    <p class="preco__atual">{formatEUR(preco.atual, locale)}</p>
+    <p class="preco__info">{c.pagamentoInfo}</p>
+  </div>
+
+  {variante === 'mirim' ? (
+    <Button label={dados.cta} variant="secondary" size="lg" upsell class="oferta-card__btn" />
+  ) : (
+    <Button
+      href={checkout}
+      label={dados.cta}
+      variant="primary"
+      size="lg"
+      checkout
+      class="oferta-card__btn"
+    />
+  )}
+
+  <p class="oferta-card__garantia">
+    <Icon name="shield" size={18} />
+    {c.garantiaLinha}
+  </p>
+</article>
+
+<style>
+  .oferta-card {
+    position: relative;
+    background: var(--white);
+    color: var(--text);
+    border-radius: var(--radius-card);
+    padding: clamp(24px, 4vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: var(--shadow-lift);
+  }
+
+  .oferta-card--mega {
+    border: 3px solid var(--yellow);
+  }
+
+  .oferta-card__selo {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    translate: -50% 0;
+    background: var(--yellow);
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 4px 12px rgba(13, 19, 36, 0.25);
+    white-space: nowrap;
+  }
+
+  .oferta-card img {
+    width: 100%;
+    border-radius: var(--radius-img);
+  }
+
+  .oferta-card__titulo {
+    font-size: clamp(1.4rem, 3vw, 1.7rem);
+    font-weight: 900;
+  }
+
+  .oferta-card--mirim .oferta-card__titulo {
+    color: var(--blue-dark);
+  }
+
+  .oferta-card--mega .oferta-card__titulo {
+    color: var(--orange-text);
+  }
+
+  .oferta-card__sub {
+    color: var(--text-muted);
+    font-size: 0.98rem;
+    margin-top: -8px;
+  }
+
+  .oferta-card__itens {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 0;
+    border-top: 1px dashed var(--kraft-light);
+    border-bottom: 1px dashed var(--kraft-light);
+  }
+
+  .oferta-card__itens li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.95rem;
+  }
+
+  .oferta-card__icone {
+    flex: 0 0 auto;
+    margin-top: 2px;
+  }
+
+  .oferta-card__preco {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .preco__de,
+  .preco__separado {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .preco__atual {
+    font-size: clamp(2.4rem, 6vw, 3.1rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--navy);
+    line-height: 1.05;
+  }
+
+  .preco__info {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .oferta-card__btn {
+    width: 100%;
+  }
+
+  .oferta-card__garantia {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .oferta-card__garantia svg {
+    flex: 0 0 auto;
+    color: var(--green-dark);
+    margin-top: 2px;
+  }
+
+  @media (min-width: 900px) {
+    .oferta-card--mega {
+      transform: scale(1.03);
+    }
+  }
+</style>

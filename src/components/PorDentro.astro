@@ -1,0 +1,288 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import Pill from './Pill.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import type { Content } from '../content';
+import pdfBarco from '../assets/img/pdf-barco-solar.jpg';
+import pdfTabuleiro from '../assets/img/pdf-tabuleiro.jpg';
+import pdfMaoMecanica from '../assets/img/pdf-mao-mecanica.jpg';
+import pdfLuzes from '../assets/img/pdf-luzes-cordao.jpg';
+import pdfLanterna from '../assets/img/pdf-lanterna.jpg';
+import pdfCarrinho from '../assets/img/pdf-carrinho-nitro.jpg';
+import pdfLixeira from '../assets/img/pdf-lixeira-jacare.jpg';
+import pdfPote from '../assets/img/pdf-pote-ceu.jpg';
+import pdfMontanhaRussa from '../assets/img/pdf-montanha-russa.jpg';
+import pdfFoguete from '../assets/img/pdf-foguete.jpg';
+
+interface Props {
+  c: Content['porDentro'];
+  a11y: Content['a11y'];
+}
+
+const { c, a11y } = Astro.props;
+const arquivos = [
+  pdfBarco,
+  pdfTabuleiro,
+  pdfMaoMecanica,
+  pdfLuzes,
+  pdfLanterna,
+  pdfCarrinho,
+  pdfLixeira,
+  pdfPote,
+  pdfMontanhaRussa,
+  pdfFoguete,
+];
+
+// versão ampliada (só é carregada no cliente ao abrir o lightbox)
+const paginas = await Promise.all(
+  arquivos.map(async (src, i) => ({
+    thumb: src,
+    full: (await getImage({ src, width: 500, format: 'webp', quality: 76 })).src,
+    legenda: c.paginas[i].legenda,
+    alt: c.paginas[i].alt,
+  }))
+);
+
+// a segunda faixa é cópia da primeira, para o loop do carrossel não ter emenda
+const faixas = [0, 1] as const;
+---
+
+<section class="section por-dentro" id="por-dentro" aria-labelledby="t-por-dentro">
+  <div class="container por-dentro__head">
+    <Pill emoji={c.pillEmoji} label={c.pill} tone="blue" />
+    <h2 id="t-por-dentro">{c.titulo}</h2>
+    <p>{c.texto}</p>
+  </div>
+
+  <div class="marquee" data-gallery>
+    <div class="marquee__track">
+      {faixas.map((faixa) => (
+        <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
+          {paginas.map((p, i) => (
+            <li>
+              <button
+                type="button"
+                class="page-card"
+                data-full={p.full}
+                data-caption={p.legenda}
+                aria-haspopup="dialog"
+                aria-label={`${p.legenda} — ${a11y.ampliar}`}
+                tabindex={faixa === 1 ? -1 : 0}
+              >
+                <span class="tape" aria-hidden="true"></span>
+                <Picture
+                  src={p.thumb}
+                  widths={[280, 500]}
+                  sizes="(max-width: 600px) 68vw, 270px"
+                  formats={['avif', 'webp']}
+                  alt={p.alt}
+                  width={500}
+                  height={667}
+                  loading={faixa === 0 && i < 4 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </button>
+              <p class="page-card__caption">{p.legenda}</p>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+
+    <dialog class="lightbox" data-lightbox aria-label={c.fechar}>
+      <button type="button" class="lightbox__close" data-close aria-label={c.fechar}>
+        <Icon name="close" />
+      </button>
+      <img src="" alt="" width="500" height="667" decoding="async" />
+      <p class="lightbox__caption"></p>
+    </dialog>
+  </div>
+
+  <div class="container por-dentro__cta">
+    <Button href="#ofertas" label={c.cta} size="lg" />
+  </div>
+</section>
+
+<style>
+  .por-dentro {
+    background: var(--cream);
+    overflow: clip;
+  }
+
+  .por-dentro__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    max-width: 760px;
+  }
+
+  .por-dentro__head p {
+    color: var(--text-muted);
+  }
+
+  .marquee {
+    margin-top: 8px;
+    overflow: hidden;
+    padding: 28px 0 4px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: por-dentro-loop 46s linear infinite;
+  }
+
+  .marquee:hover .marquee__track,
+  .marquee:focus-within .marquee__track,
+  .por-dentro:has(dialog[open]) .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__row {
+    display: flex;
+    gap: 26px;
+    margin: 0;
+    padding: 0 26px 0 0;
+    list-style: none;
+  }
+
+  .marquee__row li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-card {
+    position: relative;
+    display: block;
+    width: clamp(210px, 68vw, 270px);
+    padding: 8px;
+    border-radius: 18px;
+    background: var(--white);
+    box-shadow: 0 16px 36px rgba(31, 42, 68, 0.14);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .page-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .page-card .tape {
+    top: -12px;
+    left: 50%;
+    translate: -50% 0;
+    rotate: -4deg;
+    --tape-color: var(--kraft-light);
+  }
+
+  .marquee__row li:nth-child(odd) .page-card {
+    rotate: -1.4deg;
+  }
+
+  .marquee__row li:nth-child(even) .page-card {
+    rotate: 1.4deg;
+  }
+
+  .page-card:hover {
+    box-shadow: var(--shadow-lift);
+    rotate: 0deg;
+    transform: translateY(-6px);
+  }
+
+  .page-card__caption {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 240px;
+  }
+
+  .por-dentro__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  .lightbox {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    max-width: min(92vw, 560px);
+    max-height: 92vh;
+    margin: auto;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(13, 19, 36, 0.82);
+  }
+
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    border-radius: var(--radius-img);
+    box-shadow: var(--shadow-lift);
+    background: var(--white);
+  }
+
+  .lightbox__caption {
+    margin-top: 12px;
+    text-align: center;
+    color: var(--text-on-dark);
+    font-weight: 700;
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: -14px;
+    right: -6px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: var(--navy);
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-lift);
+  }
+
+  @keyframes por-dentro-loop {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .marquee__track {
+      animation: none;
+    }
+
+    .marquee__row[aria-hidden='true'] {
+      display: none;
+    }
+
+    .page-card,
+    .page-card:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

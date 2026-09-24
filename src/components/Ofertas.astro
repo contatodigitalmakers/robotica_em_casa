@@ -1,0 +1,273 @@
+---
+import { Picture } from 'astro:assets';
+import Pill from './Pill.astro';
+import OfertaCard from './OfertaCard.astro';
+import Icon from './Icon.astro';
+import { site } from '../config/site';
+import { formatEUR } from '../lib/format';
+import type { Content } from '../content';
+import mockupMega from '../assets/img/mockup-mega.png';
+import mockupMegaEn from '../assets/img/mockup-mega-en.png';
+import mockupMegaFr from '../assets/img/mockup-mega-fr.png';
+import mockupMegaEs from '../assets/img/mockup-mega-es.png';
+import mockupMegaIt from '../assets/img/mockup-mega-it.png';
+
+interface Props {
+  c: Content['ofertas'];
+}
+
+const { c } = Astro.props;
+const locale = Astro.currentLocale;
+const capasMega = { en: mockupMegaEn, fr: mockupMegaFr, es: mockupMegaEs, it: mockupMegaIt };
+const mockup =
+  (locale && locale in capasMega ? capasMega[locale as keyof typeof capasMega] : undefined) ?? mockupMega;
+---
+
+<section class="section ofertas cv" id="ofertas" aria-labelledby="t-ofertas" data-ofertas>
+  <div class="container">
+    <div class="ofertas__head">
+      <Pill emoji={c.pillEmoji} label={c.pill} tone="yellow" />
+      <h2 id="t-ofertas">
+        {c.tituloPre}<span class="hl hl--yellow">{c.tituloDestaque}</span>{c.tituloPos}
+      </h2>
+      <p>{c.texto}</p>
+    </div>
+
+    <div class="ofertas__grid">
+      {/* no mobile o Mega aparece primeiro (order) */}
+      <OfertaCard variante="mirim" c={c} />
+      <OfertaCard variante="mega" c={c} />
+    </div>
+
+    <ul class="ofertas__confianca" role="list">
+      {c.confianca.map((linha) => <li>{linha}</li>)}
+    </ul>
+  </div>
+</section>
+
+<dialog class="upsell" data-upsell aria-labelledby="t-upsell">
+    <button type="button" class="upsell__fechar" data-close aria-label={c.upsell.fechar}>
+      <Icon name="close" size={22} />
+    </button>
+    <p class="upsell__faixa">
+      <span aria-hidden="true">🎁</span>
+      {c.upsell.pill}
+    </p>
+    <Picture
+      src={mockup}
+      widths={[320, 640]}
+      sizes="400px"
+      formats={['avif', 'webp']}
+      alt={c.upsell.mockupAlt}
+      width={400}
+      height={300}
+      loading="lazy"
+      decoding="async"
+    />
+    <h2 id="t-upsell">{c.upsell.titulo}</h2>
+    <p class="upsell__texto">{c.upsell.texto}</p>
+    <p class="upsell__precos">
+      <s>{formatEUR(site.precos.mega.atual, locale)}</s>
+      <strong>{formatEUR(site.precos.megaDesconto.atual, locale)}</strong>
+    </p>
+    <a class="upsell__aceitar" href={site.checkout.megaDesconto} data-checkout rel="noopener">
+      <Icon name="check" size={20} />
+      {c.upsell.aceitar}
+    </a>
+    <a class="upsell__recusar" href={site.checkout.mirim} data-checkout rel="noopener">{c.upsell.recusar}</a>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-upsell]');
+  if (dialog) {
+    document.querySelector('[data-upsell-open]')?.addEventListener('click', () => dialog.showModal());
+    dialog.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .ofertas {
+    background: var(--navy);
+    color: var(--text-on-dark);
+  }
+
+  .ofertas__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    max-width: 720px;
+    margin-inline: auto;
+    margin-bottom: clamp(32px, 5vw, 52px);
+  }
+
+  .ofertas__head p {
+    color: var(--text-on-dark-muted);
+  }
+
+  .ofertas__grid {
+    display: grid;
+    gap: 28px;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+
+  /* mobile: Mega primeiro */
+  .ofertas__grid > :first-child {
+    order: 2;
+  }
+
+  .ofertas__grid > :last-child {
+    order: 1;
+  }
+
+  .ofertas__confianca {
+    list-style: none;
+    margin-top: clamp(28px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .ofertas__confianca li {
+    font-size: 0.88rem;
+    color: var(--text-on-dark-muted);
+  }
+
+  @media (min-width: 900px) {
+    .ofertas__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .ofertas__grid > :first-child {
+      order: 1;
+    }
+
+    .ofertas__grid > :last-child {
+      order: 2;
+    }
+  }
+
+  .upsell {
+    margin: auto;
+    height: fit-content;
+    border: none;
+    border-radius: var(--radius-card);
+    padding: 28px 22px 22px;
+    width: min(440px, calc(100% - 32px));
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
+    background: var(--white);
+    color: var(--text);
+    text-align: center;
+  }
+
+  .upsell::backdrop {
+    background: rgba(31, 42, 68, 0.62);
+  }
+
+  .upsell__fechar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--navy);
+    cursor: pointer;
+  }
+
+  .upsell__faixa {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--yellow);
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .upsell img {
+    width: 100%;
+    border-radius: var(--radius-img);
+    margin-bottom: 16px;
+  }
+
+  .upsell h2 {
+    font-size: clamp(1.35rem, 4vw, 1.7rem);
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .upsell__texto {
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 0.98rem;
+  }
+
+  .upsell__precos {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .upsell__precos s {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .upsell__precos strong {
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    font-weight: 900;
+    color: var(--green-dark);
+    letter-spacing: -0.03em;
+  }
+
+  .upsell__aceitar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 20px;
+    border-radius: var(--radius-pill);
+    background: var(--orange);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 1.05rem;
+    box-shadow: 0 4px 0 var(--orange-shadow);
+  }
+
+  .upsell__aceitar svg {
+    color: var(--green-dark);
+  }
+
+  .upsell__recusar {
+    display: inline-block;
+    margin-top: 14px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import { site } from '../config/site';
+import type { Content } from '../content';
+
+interface Props {
+  c: Content['cookies'];
+  a11y: Content['a11y'];
+}
+
+const { c, a11y } = Astro.props;
+---
+
+<div
+  class="cookie-banner"
+  data-cookie-banner
+  data-pixel={site.metaPixelId ?? ''}
+  role="region"
+  aria-label={a11y.avisoCookies}
+  hidden
+>
+  <p>
+    {c.texto}
+    <a href={c.href}>{c.link}</a>
+  </p>
+  <div class="cookie-banner__acoes">
+    <button type="button" class="cookie-banner__btn cookie-banner__btn--recusar" data-recusar>
+      {c.recusar}
+    </button>
+    <button type="button" class="cookie-banner__btn cookie-banner__btn--aceitar" data-aceitar>
+      {c.aceitar}
+    </button>
+  </div>
+</div>
+
+<script>
+  import '../scripts/consent';
+</script>
+
+<style>
+  .cookie-banner[hidden] {
+    display: none;
+  }
+
+  .cookie-banner {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+    background: var(--navy);
+    color: var(--text-on-dark);
+    border-radius: 18px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-lift);
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  .cookie-banner p {
+    font-size: 0.88rem;
+    color: var(--text-on-dark-muted);
+  }
+
+  .cookie-banner a {
+    color: var(--yellow);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cookie-banner__acoes {
+    display: flex;
+    gap: 10px;
+  }
+
+  .cookie-banner__btn {
+    flex: 1;
+    min-height: 44px;
+    border-radius: var(--radius-pill);
+    font-weight: 800;
+    font-size: 0.92rem;
+    padding: 10px 18px;
+  }
+
+  .cookie-banner__btn--aceitar {
+    background: var(--yellow);
+    color: var(--navy);
+  }
+
+  .cookie-banner__btn--recusar {
+    background: transparent;
+    color: var(--text-on-dark);
+    border: 1.5px solid rgba(245, 241, 232, 0.4);
+  }
+
+  @media (min-width: 768px) {
+    .cookie-banner {
+      flex-direction: row;
+      align-items: center;
+      left: auto;
+      right: 20px;
+      bottom: 20px;
+      max-width: 480px;
+    }
+
+    .cookie-banner__acoes {
+      flex: 0 0 auto;
+    }
+  }
+</style>

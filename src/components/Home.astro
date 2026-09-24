@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { getContent } from '../content';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Alternativa from './Alternativa.astro';
+import PorDentro from './PorDentro.astro';
+import Historia from './Historia.astro';
+import Divisor from './Divisor.astro';
+import Exemplos from './Exemplos.astro';
+import Depoimentos from './Depoimentos.astro';
+import Ofertas from './Ofertas.astro';
+import Garantia from './Garantia.astro';
+import Lancamento from './Lancamento.astro';
+import Faq from './Faq.astro';
+import CtaFinal from './CtaFinal.astro';
+import Footer from './Footer.astro';
+import StickyCta from './StickyCta.astro';
+import CookieBanner from './CookieBanner.astro';
+
+const c = getContent(Astro.currentLocale);
+---
+
+<Base title={c.meta.title} description={c.meta.description} skipLink={c.a11y.pular}>
+  <Header c={c.header} />
+  <main id="conteudo">
+    <Hero c={c.hero} />
+    <Alternativa c={c.alternativa} />
+    <PorDentro c={c.porDentro} a11y={c.a11y} />
+    <Historia c={c.historia} />
+    <Divisor c={c.divisor} />
+    <Exemplos c={c.exemplos} />
+    <Depoimentos c={c.depoimentos} />
+    <Ofertas c={c.ofertas} />
+    <Garantia c={c.garantia} />
+    <Lancamento c={c.lancamento} />
+    <Faq c={c.faq} />
+    <CtaFinal c={c.ctaFinal} />
+  </main>
+  <Footer c={c.footer} a11y={c.a11y} />
+  <StickyCta c={c.sticky} />
+  <CookieBanner c={c.cookies} a11y={c.a11y} />
+
+  <script>
+    import '../scripts/site';
+  </script>
+</Base>

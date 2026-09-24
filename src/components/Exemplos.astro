@@ -1,0 +1,175 @@
+---
+import { Picture } from 'astro:assets';
+import Pill from './Pill.astro';
+import type { Content } from '../content';
+import exemplo1 from '../assets/img/exemplo-1.jpg';
+import exemplo2 from '../assets/img/exemplo-2.jpg';
+import exemplo3 from '../assets/img/exemplo-3.jpg';
+import exemplo4 from '../assets/img/exemplo-4.jpg';
+import exemplo5 from '../assets/img/exemplo-5.jpg';
+import exemplo6 from '../assets/img/exemplo-6.jpg';
+import exemplo7 from '../assets/img/exemplo-7.jpg';
+import exemplo8 from '../assets/img/exemplo-8.jpg';
+import exemplo9 from '../assets/img/exemplo-9.jpg';
+
+interface Props {
+  c: Content['exemplos'];
+}
+
+const { c } = Astro.props;
+const fotos = [exemplo1, exemplo2, exemplo3, exemplo4, exemplo5, exemplo6, exemplo7, exemplo8, exemplo9];
+const faixas = [0, 1] as const;
+---
+
+<section class="section exemplos" id="exemplos" aria-labelledby="t-exemplos">
+  <div class="container exemplos__head">
+    <Pill emoji={c.pillEmoji} label={c.pill} tone="pink" />
+    <h2 id="t-exemplos">{c.titulo}</h2>
+    <p>{c.texto}</p>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee__track">
+      {faixas.map((faixa) => (
+        <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
+          {fotos.map((f, i) => (
+            <li>
+              <figure class="exemplo-card">
+                <span class="tape" aria-hidden="true"></span>
+                <Picture
+                  src={f}
+                  widths={[480, 960]}
+                  sizes="(max-width: 600px) 78vw, 460px"
+                  formats={['avif', 'webp']}
+                  alt={faixa === 1 ? '' : c.alts[i]}
+                  width={f.width}
+                  height={f.height}
+                  loading={faixa === 0 && i < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </figure>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+
+  <p class="container exemplos__legenda">{c.legenda}</p>
+</section>
+
+<style>
+  .exemplos {
+    background: var(--white);
+    overflow: clip;
+  }
+
+  .exemplos__head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 760px;
+  }
+
+  .exemplos__head p {
+    color: var(--text-muted);
+  }
+
+  .marquee {
+    margin-top: 8px;
+    overflow: hidden;
+    padding: 28px 0 8px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: exemplos-loop 54s linear infinite;
+  }
+
+  .marquee:hover .marquee__track,
+  .marquee:focus-within .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin: 0;
+    padding: 0 22px 0 0;
+    list-style: none;
+  }
+
+  .exemplo-card {
+    position: relative;
+    margin: 0;
+    height: clamp(230px, 58vw, 340px);
+    padding: 8px;
+    border-radius: 18px;
+    background: var(--cream);
+    box-shadow: 0 16px 36px rgba(31, 42, 68, 0.12);
+  }
+
+  .exemplo-card picture {
+    display: block;
+    height: 100%;
+  }
+
+  .exemplo-card img {
+    height: 100%;
+    width: auto;
+    max-width: none;
+    border-radius: 12px;
+  }
+
+  .exemplo-card .tape {
+    top: -12px;
+    left: 50%;
+    translate: -50% 0;
+    rotate: -4deg;
+    --tape-color: var(--kraft-light);
+  }
+
+  .marquee__row li:nth-child(odd) .exemplo-card {
+    rotate: -1.3deg;
+  }
+
+  .marquee__row li:nth-child(even) .exemplo-card {
+    rotate: 1.3deg;
+  }
+
+  .exemplos__legenda {
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  @keyframes exemplos-loop {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .marquee__track {
+      animation: none;
+    }
+
+    .marquee__row[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

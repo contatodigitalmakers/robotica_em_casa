@@ -1,0 +1,270 @@
+---
+import { Picture } from 'astro:assets';
+import Pill from './Pill.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import type { Content } from '../content';
+import mascote from '../assets/img/mascote.png';
+
+interface Props {
+  c: Content['historia'];
+}
+
+const { c } = Astro.props;
+
+const tracos = ['blue', 'green', 'orange', 'pink'] as const;
+---
+
+<section class="section historia cv" id="historia" aria-labelledby="t-historia">
+  <div class="container">
+    <div class="historia__head">
+      <Pill emoji={c.pillEmoji} label={c.pill} tone="orange" />
+      <h2 id="t-historia">
+        {c.tituloPre}<span class="hl hl--orange">{c.tituloDestaque}</span>{c.tituloPos}
+      </h2>
+      <p class="historia__intro">{c.intro}</p>
+    </div>
+
+    <ul class="historia__grid" role="list">
+      {c.cards.map((card, i) => (
+        <li class={`traco--${tracos[i % tracos.length]}`}>
+          <h3>{card.titulo}</h3>
+          <p>{card.texto}</p>
+        </li>
+      ))}
+    </ul>
+
+    <figure class="historia__citacao">
+      <Icon name="quote" size={56} />
+      <blockquote>
+        {c.citacao.textoPre}<strong>{c.citacao.destaque}</strong>{c.citacao.textoPos}
+      </blockquote>
+      <figcaption>
+        <span class="historia__selo">
+          <Picture
+            src={mascote}
+            widths={[64, 128]}
+            sizes="64px"
+            formats={['avif', 'webp']}
+            alt={c.citacao.mascoteAlt}
+            width={1024}
+            height={1024}
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+        <span>
+          <strong>{c.citacao.assinatura}</strong>
+          <small>{c.citacao.cargo}</small>
+        </span>
+      </figcaption>
+      <ul class="historia__stats" role="list">
+        {c.stats.map((s) => (
+          <li>
+            <strong>{s.valor}</strong>
+            <span>{s.rotulo}</span>
+          </li>
+        ))}
+      </ul>
+    </figure>
+
+    <div class="historia__missao">
+      <span class="historia__estrela" aria-hidden="true"><Icon name="star" size={26} /></span>
+      <p>
+        {c.missao.pre}<strong>{c.missao.destaque}</strong>{c.missao.pos}
+      </p>
+    </div>
+
+    <div class="historia__cta">
+      <Button href="#ofertas" label={c.cta} size="lg" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .historia {
+    background: var(--cream-2);
+  }
+
+  .historia__head {
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .historia__intro {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .historia__grid {
+    list-style: none;
+    display: grid;
+    gap: 16px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .historia__grid li {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+    border-top: 6px solid var(--traco);
+  }
+
+  .traco--blue { --traco: var(--blue); }
+  .traco--green { --traco: var(--green); }
+  .traco--orange { --traco: var(--orange); }
+  .traco--pink { --traco: var(--pink); }
+
+  .historia__grid h3 {
+    margin-bottom: 8px;
+  }
+
+  .historia__grid p {
+    color: var(--text-muted);
+    font-size: 0.96rem;
+  }
+
+  .historia__citacao {
+    position: relative;
+    background: var(--navy);
+    color: var(--text-on-dark);
+    border-radius: var(--radius-card);
+    padding: clamp(28px, 5vw, 48px);
+    box-shadow: var(--shadow-lift);
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .historia__citacao > svg {
+    color: var(--yellow);
+    opacity: 0.9;
+    margin-bottom: 14px;
+  }
+
+  .historia__citacao blockquote {
+    font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    max-width: 30ch;
+  }
+
+  .historia__citacao blockquote strong {
+    color: var(--yellow);
+  }
+
+  .historia__citacao figcaption {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .historia__selo {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--kraft);
+    background: var(--cream);
+  }
+
+  .historia__selo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 28%;
+  }
+
+  .historia__citacao figcaption strong {
+    display: block;
+    font-size: 0.98rem;
+  }
+
+  .historia__citacao figcaption small {
+    color: var(--text-on-dark-muted);
+    font-size: 0.85rem;
+  }
+
+  .historia__stats {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(245, 241, 232, 0.14);
+  }
+
+  .historia__stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .historia__stats strong {
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    font-weight: 900;
+    color: var(--yellow);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .historia__stats span {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-on-dark-muted);
+    line-height: 1.35;
+  }
+
+  .historia__missao {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: clamp(20px, 3.5vw, 30px);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: clamp(28px, 4vw, 40px);
+  }
+
+  .historia__estrela {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: var(--navy);
+    display: grid;
+    place-items: center;
+  }
+
+  .historia__missao p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+  }
+
+  .historia__missao strong {
+    color: var(--orange-dark);
+  }
+
+  .historia__cta {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .historia__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .historia__stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

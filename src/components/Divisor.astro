@@ -1,0 +1,60 @@
+---
+import type { Content } from '../content';
+
+interface Props {
+  c: Content['divisor'];
+}
+
+const { c } = Astro.props;
+---
+
+<div class="divisor" role="separator">
+  <p>
+    <svg class="divisor__rabisco" width="72" height="24" viewBox="0 0 72 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+      <path d="M2 14c6-8 10-8 12-2s-4 8-8 6 2-10 8-8" />
+      <path d="M34 4l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L26 11l6-1z" fill="currentColor" stroke="none" />
+      <path d="M58 6v12m-6-6h12" />
+    </svg>
+    <em>{c.frase}</em>
+    <svg class="divisor__rabisco" width="72" height="24" viewBox="0 0 72 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+      <path d="M70 14c-6-8-10-8-12-2s4 8 8 6-2-10-8-8" />
+      <path d="M20 5l2.2 4.4 4.8.7-3.5 3.4.8 4.8-4.3-2.2-4.3 2.2.8-4.8-3.5-3.4 4.8-.7z" fill="currentColor" stroke="none" />
+      <path d="M46 18c3-6 8-6 10 0" />
+    </svg>
+  </p>
+</div>
+
+<style>
+  .divisor {
+    background: var(--cream);
+    border-top: 6px solid var(--yellow);
+    padding: clamp(28px, 4vw, 40px) 20px;
+  }
+
+  .divisor p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    text-align: center;
+  }
+
+  .divisor em {
+    font-size: clamp(1.15rem, 3vw, 1.5rem);
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+
+  .divisor__rabisco {
+    color: var(--kraft);
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    .divisor__rabisco {
+      width: 44px;
+    }
+  }
+</style>

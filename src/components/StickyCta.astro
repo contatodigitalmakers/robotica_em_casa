@@ -1,0 +1,108 @@
+---
+import { site } from '../config/site';
+import { formatEUR } from '../lib/format';
+import type { Content } from '../content';
+
+interface Props {
+  c: Content['sticky'];
+}
+
+const { c } = Astro.props;
+const locale = Astro.currentLocale;
+---
+
+<div class="sticky-cta" data-sticky hidden>
+  <p class="sticky-cta__info">
+    <strong>{c.produto}</strong>
+    <span>{formatEUR(site.precos.mega.atual, locale)}</span>
+  </p>
+  <a href={site.checkout.mega} class="sticky-cta__btn" data-checkout rel="noopener">{c.cta}</a>
+</div>
+
+<script>
+  import '../scripts/sticky';
+</script>
+
+<style>
+  .sticky-cta[hidden] {
+    display: none;
+  }
+
+  .sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255, 248, 236, 0.96);
+    backdrop-filter: blur(8px);
+    border-top: 2px solid var(--kraft-light);
+    box-shadow: 0 -6px 24px rgba(31, 42, 68, 0.14);
+    transform: translateY(110%);
+    transition: transform 0.25s ease;
+  }
+
+  .sticky-cta[data-visivel] {
+    transform: translateY(0);
+  }
+
+  .sticky-cta__info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  .sticky-cta__info strong {
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .sticky-cta__info span {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--orange-dark);
+  }
+
+  .sticky-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 11px 22px;
+    border-radius: var(--radius-pill);
+    background: var(--orange);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 0.98rem;
+    box-shadow: 0 3px 0 var(--orange-shadow);
+    white-space: nowrap;
+  }
+
+  .sticky-cta__btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--orange-shadow);
+  }
+
+  /* só mobile */
+  @media (min-width: 768px) {
+    .sticky-cta {
+      display: none;
+    }
+  }
+
+  /* enquanto o banner de cookies estiver visível, a barra espera */
+  :global(body.consent-pendente) .sticky-cta {
+    transform: translateY(110%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta {
+      transition: none;
+    }
+  }
+</style>

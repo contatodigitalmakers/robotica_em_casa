@@ -1,0 +1,86 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { site } from '../config/site';
+import { localeHref, localeMeta, locales } from '../lib/locales';
+
+interface Props {
+  title: string;
+  description: string;
+  skipLink: string;
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { title, description, skipLink, jsonLd = [] } = Astro.props;
+
+const idioma = localeMeta(Astro.currentLocale);
+const lang = idioma.htmlLang;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const alternates = locales.map((l) => ({
+  hreflang: l.hreflang,
+  href: new URL(localeHref(l.code, Astro.url.pathname), site.url).href,
+}));
+const xDefault = new URL(localeHref('pt-br', Astro.url.pathname), site.url).href;
+const ogImage = new URL('/og-image.jpg', site.url).href;
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.empresa.nome,
+  url: site.url,
+  logo: new URL('/favicon.png', site.url).href,
+  email: site.empresa.emailSuporte,
+  address: { '@type': 'PostalAddress', streetAddress: site.empresa.endereco, addressCountry: 'BR' },
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    <meta name="theme-color" content="#1F2A44" />
+
+    <!-- fonte: 1 arquivo woff2 auto-hospedado, pré-carregado -->
+    <link rel="preload" href="/fonts/nunito-latin-var.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- checkout: resolve DNS cedo, sem conexão completa -->
+    <link rel="dns-prefetch" href="https://pay.hotmart.com" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={idioma.og} />
+    <meta property="og:site_name" content={site.marca} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- ícones -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(organization)} />
+    {jsonLd.map((obj) => (
+      <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+    ))}
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">{skipLink}</a>
+    <slot />
+  </body>
+</html>

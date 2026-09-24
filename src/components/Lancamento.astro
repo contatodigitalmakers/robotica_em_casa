@@ -1,0 +1,106 @@
+---
+import Button from './Button.astro';
+import { site } from '../config/site';
+import { formatEUR, formatDataHoraBR } from '../lib/format';
+import type { Content } from '../content';
+
+interface Props {
+  c: Content['lancamento'];
+}
+
+const { c } = Astro.props;
+const locale = Astro.currentLocale;
+
+// Só renderiza com data fixa e real configurada; o contador conta até ela,
+// igual para todos os visitantes (nunca reinicia, nunca usa cookie/localStorage).
+const ativo =
+  site.lancamento.fimISO !== null &&
+  site.lancamento.precoDepois.mirim !== null &&
+  site.lancamento.precoDepois.mega !== null;
+
+const texto = ativo
+  ? c.texto({
+      mirim: formatEUR(site.precos.mirim.atual, locale),
+      mega: formatEUR(site.precos.mega.atual, locale),
+      data: formatDataHoraBR(site.lancamento.fimISO!, locale),
+      depoisMirim: formatEUR(site.lancamento.precoDepois.mirim!, locale),
+      depoisMega: formatEUR(site.lancamento.precoDepois.mega!, locale),
+    })
+  : '';
+---
+
+{ativo && (
+  <section
+    class="section lancamento cv"
+    aria-labelledby="t-lancamento"
+    data-countdown={site.lancamento.fimISO}
+  >
+    <div class="container lancamento__inner">
+      <h2 id="t-lancamento">{c.titulo}</h2>
+      <p class="lancamento__texto">{texto}</p>
+
+      <div class="lancamento__contador" role="timer" aria-live="off">
+        {c.unidades.map((u, i) => (
+          <div class="lancamento__caixa">
+            <span class="lancamento__num" data-unidade={i}>00</span>
+            <span class="lancamento__rotulo">{u}</span>
+          </div>
+        ))}
+      </div>
+
+      <Button href="#ofertas" label={c.cta} size="lg" />
+    </div>
+  </section>
+)}
+
+<style>
+  .lancamento {
+    background: var(--cream-2);
+  }
+
+  .lancamento__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    max-width: 720px;
+  }
+
+  .lancamento__texto {
+    color: var(--text-muted);
+  }
+
+  .lancamento__contador {
+    display: flex;
+    gap: 12px;
+  }
+
+  .lancamento__caixa {
+    background: var(--navy);
+    color: var(--text-on-dark);
+    border-radius: 16px;
+    padding: 14px 10px;
+    min-width: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .lancamento__num {
+    font-size: 1.9rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--yellow);
+  }
+
+  .lancamento__rotulo {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-on-dark-muted);
+  }
+</style>

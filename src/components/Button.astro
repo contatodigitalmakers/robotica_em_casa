@@ -1,0 +1,99 @@
+---
+/**
+ * Botão CTA. Primário: fundo --orange, texto --navy 800 (nunca branco no laranja).
+ * `checkout` marca links de pagamento (recebem UTMs e disparam InitiateCheckout).
+ */
+interface Props {
+  href?: string;
+  label: string;
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  checkout?: boolean;
+  upsell?: boolean;
+  class?: string;
+}
+
+const { href, label, variant = 'primary', size = 'md', checkout = false, upsell = false, class: klass } =
+  Astro.props;
+const classes = ['btn', `btn--${variant}`, `btn--${size}`, klass];
+---
+
+{upsell ? (
+  <button type="button" class:list={classes} data-upsell-open>
+    {label}
+  </button>
+) : (
+  <a
+    href={href}
+    class:list={classes}
+    data-checkout={checkout ? '' : undefined}
+    rel={checkout ? 'noopener' : undefined}
+  >
+    {label}
+  </a>
+)}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    border-radius: var(--radius-pill);
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.25;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    will-change: transform;
+  }
+
+  button.btn {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn--sm { padding: 9px 18px; font-size: 0.92rem; }
+  .btn--md { padding: 15px 30px; font-size: 1.05rem; }
+  .btn--lg { padding: 18px 34px; font-size: 1.12rem; }
+
+  .btn--primary {
+    background: var(--orange);
+    color: var(--navy);
+    box-shadow: 0 4px 0 var(--orange-shadow);
+  }
+
+  .btn--primary:hover {
+    background: #ffa05c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--orange-shadow);
+  }
+
+  .btn--primary:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--orange-shadow);
+  }
+
+  .btn--secondary {
+    background: var(--white);
+    color: var(--navy);
+    border: 2px solid var(--navy);
+    box-shadow: 0 4px 0 rgba(31, 42, 68, 0.22);
+  }
+
+  .btn--secondary:hover {
+    background: var(--cream);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(31, 42, 68, 0.22);
+  }
+
+  .btn--secondary:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(31, 42, 68, 0.22);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+</style>

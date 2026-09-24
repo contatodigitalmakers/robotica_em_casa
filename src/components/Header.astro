@@ -1,0 +1,79 @@
+---
+import { Picture } from 'astro:assets';
+import Button from './Button.astro';
+import type { Content } from '../content';
+import logo from '../assets/img/logo.png';
+
+interface Props {
+  c: Content['header'];
+}
+
+const { c } = Astro.props;
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="#topo" class="header__logo" aria-label={c.logoAlt}>
+      <Picture
+        src={logo}
+        widths={[132, 264]}
+        sizes="132px"
+        formats={['avif', 'webp']}
+        alt=""
+        width={1024}
+        height={1024}
+        loading="eager"
+        decoding="async"
+      />
+    </a>
+    <Button href="#ofertas" label={c.cta} size="sm" />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: var(--navy);
+    /* fallback: sombra sutil constante quando não há scroll-driven animations */
+    box-shadow: 0 4px 16px rgba(13, 19, 36, 0.25);
+  }
+
+  /* com suporte: sombra só aparece ao rolar (sem JS) */
+  @supports (animation-timeline: scroll()) {
+    .header {
+      box-shadow: 0 4px 16px rgba(13, 19, 36, 0);
+      animation: header-shadow linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90px;
+    }
+  }
+
+  @keyframes header-shadow {
+    to {
+      box-shadow: 0 4px 16px rgba(13, 19, 36, 0.35);
+    }
+  }
+
+  .header__inner {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header__logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .header__logo img {
+    height: 52px;
+    width: auto;
+    border-radius: 10px;
+  }
+</style>

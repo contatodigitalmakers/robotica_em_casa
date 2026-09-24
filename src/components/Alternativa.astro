@@ -1,0 +1,242 @@
+---
+import { Picture } from 'astro:assets';
+import Pill from './Pill.astro';
+import Button from './Button.astro';
+import type { Content } from '../content';
+import roboPapelao from '../assets/img/robo-papelao.jpg';
+import beneficioFoco from '../assets/img/beneficio-foco.jpg';
+import beneficioPratica from '../assets/img/beneficio-pratica.jpg';
+import beneficioCriatividade from '../assets/img/beneficio-criatividade.jpg';
+import beneficioOrgulho from '../assets/img/beneficio-orgulho.jpg';
+
+interface Props {
+  c: Content['alternativa'];
+}
+
+const { c } = Astro.props;
+const fotos = [beneficioFoco, beneficioPratica, beneficioCriatividade, beneficioOrgulho];
+---
+
+<section class="section alternativa" aria-labelledby="t-alternativa">
+  <div class="container">
+    <div class="alternativa__card">
+      <div class="alternativa__topo">
+        <div class="alternativa__textos">
+          <Pill emoji={c.pillEmoji} label={c.pill} tone="yellow" />
+          <h2 id="t-alternativa">
+            {c.tituloPre}<span class="hl hl--yellow">{c.tituloDestaque}</span>{c.tituloPos}
+          </h2>
+          <p>{c.texto}</p>
+        </div>
+        <figure class="alternativa__foto">
+          <span class="tape tape--a" aria-hidden="true"></span>
+          <span class="tape tape--b" aria-hidden="true"></span>
+          <Picture
+            src={roboPapelao}
+            widths={[420, 840]}
+            sizes="(min-width: 900px) 380px, 88vw"
+            formats={['avif', 'webp']}
+            alt={c.fotoAlt}
+            width={840}
+            height={630}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
+
+      <ul class="alternativa__grid" role="list">
+        {c.beneficios.map((b, i) => (
+          <li>
+            <Picture
+              src={fotos[i]}
+              widths={[160, 320]}
+              sizes="(min-width: 768px) 120px, 84px"
+              formats={['avif', 'webp']}
+              alt={b.alt}
+              width={160}
+              height={160}
+              loading="lazy"
+              decoding="async"
+            />
+            <div>
+              <h3>{b.titulo}</h3>
+              <p>{b.texto}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div class="alternativa__cta">
+        <div>
+          <h3>{c.ctaBox.tituloPre}<strong>{c.ctaBox.tituloDestaque}</strong>{c.ctaBox.tituloPos}</h3>
+          <p>{c.ctaBox.texto}</p>
+        </div>
+        <div class="alternativa__cta-acao">
+          <p>
+            {c.ctaBox.perguntaPre}<strong>{c.ctaBox.perguntaDestaque}</strong>{c.ctaBox.perguntaPos}
+          </p>
+          <Button href="#ofertas" label={c.ctaBox.cta} />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .alternativa {
+    background: var(--cream);
+  }
+
+  .alternativa__card {
+    background: var(--navy);
+    color: var(--text-on-dark);
+    border-radius: var(--radius-card);
+    padding: clamp(28px, 5vw, 56px);
+    box-shadow: var(--shadow-lift);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 44px);
+  }
+
+  .alternativa__topo {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .alternativa__textos {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .alternativa__textos p {
+    color: var(--text-on-dark-muted);
+    max-width: 52ch;
+  }
+
+  .alternativa__foto {
+    position: relative;
+    justify-self: center;
+    transform: rotate(1.5deg);
+  }
+
+  .alternativa__foto img {
+    width: min(100%, 520px);
+    border-radius: var(--radius-img);
+    box-shadow: 0 16px 40px rgba(13, 19, 36, 0.4);
+  }
+
+  .tape--a {
+    top: -14px;
+    left: 18px;
+    rotate: -8deg;
+    --tape-color: var(--yellow);
+  }
+
+  .tape--b {
+    bottom: -12px;
+    right: 14px;
+    rotate: 6deg;
+    --tape-color: var(--pink);
+  }
+
+  .alternativa__grid {
+    list-style: none;
+    display: grid;
+    gap: 16px;
+  }
+
+  .alternativa__grid li {
+    background: var(--navy-2);
+    border: 1px solid rgba(245, 241, 232, 0.08);
+    border-radius: var(--radius-card);
+    padding: 18px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .alternativa__grid img {
+    width: 84px;
+    height: 84px;
+    border-radius: 14px;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+
+  .alternativa__grid h3 {
+    margin-bottom: 6px;
+  }
+
+  .alternativa__grid p {
+    font-size: 0.94rem;
+    color: var(--text-on-dark-muted);
+  }
+
+  .alternativa__cta {
+    background: var(--cream);
+    color: var(--text);
+    border-radius: var(--radius-card);
+    padding: clamp(22px, 4vw, 36px);
+    display: grid;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .alternativa__cta h3 {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .alternativa__cta h3 strong {
+    color: var(--orange-text);
+  }
+
+  .alternativa__cta-acao strong {
+    color: var(--orange-dark);
+  }
+
+  .alternativa__cta p {
+    color: var(--text-muted);
+  }
+
+  .alternativa__cta-acao {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .alternativa__cta-acao p {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  @media (min-width: 900px) {
+    .alternativa__topo {
+      grid-template-columns: 1.25fr 1fr;
+    }
+
+    .alternativa__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .alternativa__grid img {
+      width: 120px;
+      height: 120px;
+    }
+
+    .alternativa__cta {
+      grid-template-columns: 1.4fr 1fr;
+    }
+
+    .alternativa__cta-acao {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+</style>

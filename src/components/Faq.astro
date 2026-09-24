@@ -1,0 +1,136 @@
+---
+import Pill from './Pill.astro';
+import type { Content } from '../content';
+
+interface Props {
+  c: Content['faq'];
+}
+
+const { c } = Astro.props;
+
+// JSON-LD FAQPage gerado do MESMO conteúdo do acordeão
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: c.itens.map((i) => ({
+    '@type': 'Question',
+    name: i.q,
+    acceptedAnswer: { '@type': 'Answer', text: i.a },
+  })),
+};
+---
+
+<section class="section faq cv" id="duvidas" aria-labelledby="t-faq">
+  <div class="container faq__inner">
+    <div class="faq__head">
+      <Pill emoji={c.pillEmoji} label={c.pill} tone="navy" />
+      <h2 id="t-faq">{c.titulo}</h2>
+    </div>
+
+    <div class="faq__lista">
+      {c.itens.map((item) => (
+        <details>
+          <summary>
+            <span>{item.q}</span>
+            <span class="faq__plus" aria-hidden="true"></span>
+          </summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</section>
+
+<style>
+  .faq {
+    background: var(--cream);
+  }
+
+  .faq__inner {
+    max-width: 780px;
+  }
+
+  .faq__head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: clamp(24px, 4vw, 36px);
+  }
+
+  .faq__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  details {
+    background: var(--white);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    min-height: 44px;
+    font-weight: 800;
+    font-size: 1.02rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* ícone "+" que gira ao abrir */
+  .faq__plus {
+    position: relative;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--yellow-tint);
+    transition: transform 0.25s ease, background-color 0.25s ease;
+  }
+
+  .faq__plus::before,
+  .faq__plus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--navy);
+    translate: -50% -50%;
+  }
+
+  .faq__plus::after {
+    rotate: 90deg;
+  }
+
+  details[open] .faq__plus {
+    transform: rotate(45deg);
+    background: var(--yellow);
+  }
+
+  details p {
+    padding: 0 22px 20px;
+    color: var(--text-muted);
+    font-size: 0.97rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__plus {
+      transition: none;
+    }
+  }
+</style>

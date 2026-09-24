@@ -1,0 +1,116 @@
+---
+import { Picture } from 'astro:assets';
+import Button from './Button.astro';
+import type { Content } from '../content';
+import mascote from '../assets/img/mascote.png';
+
+interface Props {
+  c: Content['ctaFinal'];
+}
+
+const { c } = Astro.props;
+---
+
+<section class="section cta-final cv" aria-labelledby="t-cta-final">
+  <div class="cta-final__blobs" aria-hidden="true">
+    <span class="blob blob--1"></span>
+    <span class="blob blob--2"></span>
+    <span class="blob blob--3"></span>
+  </div>
+
+  <div class="container cta-final__inner">
+    <div class="cta-final__selo">
+      <Picture
+        src={mascote}
+        widths={[96, 192]}
+        sizes="96px"
+        formats={['avif', 'webp']}
+        alt={c.mascoteAlt}
+        width={1024}
+        height={1024}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <h2 id="t-cta-final">
+      {c.tituloPre}<span class="hl hl--yellow">{c.tituloDestaque}</span>{c.tituloPos}
+    </h2>
+    <p>{c.texto}</p>
+    <Button href="#ofertas" label={c.cta} size="lg" />
+    <small>{c.microcopy}</small>
+  </div>
+</section>
+
+<style>
+  .cta-final {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy);
+    color: var(--text-on-dark);
+  }
+
+  .blob--1 {
+    width: 320px;
+    height: 320px;
+    top: -120px;
+    right: -90px;
+    background: radial-gradient(circle, var(--green), transparent 65%);
+    opacity: 0.3;
+  }
+
+  .blob--2 {
+    width: 300px;
+    height: 300px;
+    bottom: -130px;
+    left: -100px;
+    background: radial-gradient(circle, var(--orange), transparent 65%);
+    opacity: 0.3;
+  }
+
+  .blob--3 {
+    width: 260px;
+    height: 260px;
+    top: 30%;
+    left: 60%;
+    background: radial-gradient(circle, var(--blue), transparent 65%);
+    opacity: 0.28;
+  }
+
+  .cta-final__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    max-width: 680px;
+  }
+
+  .cta-final__selo {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 4px solid var(--kraft);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(13, 19, 36, 0.35);
+  }
+
+  .cta-final__selo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 28%;
+  }
+
+  .cta-final__inner > p {
+    color: var(--text-on-dark-muted);
+    max-width: 52ch;
+  }
+
+  .cta-final__inner small {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-on-dark-muted);
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+/** Etiqueta pequena acima de cada H2. Texto sempre via content. */
+interface Props {
+  emoji: string;
+  label: string;
+  tone?: 'yellow' | 'blue' | 'green' | 'orange' | 'pink' | 'navy';
+}
+const { emoji, label, tone = 'yellow' } = Astro.props;
+---
+
+<span class:list={['pill', `pill--${tone}`]}>
+  <span aria-hidden="true">{emoji}</span>
+  {label}
+</span>
+
+<style>
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+  }
+
+  .pill--yellow { background: var(--yellow); color: var(--navy); }
+  .pill--blue { background: var(--blue-tint); color: var(--blue-dark); }
+  .pill--green { background: var(--green-tint); color: var(--green-dark); }
+  .pill--orange { background: var(--orange-tint); color: var(--orange-dark); }
+  .pill--pink { background: var(--pink-tint); color: var(--pink-dark); }
+  .pill--navy { background: var(--navy-tint); color: var(--navy); }
+</style>

@@ -1,0 +1,8 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { getContent } from '../content';
+
+const c = getContent(Astro.currentLocale);
+---
+
+<LegalPage bloco={c.legal.privacidade} />
