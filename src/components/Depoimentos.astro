@@ -3,16 +3,25 @@ import { Picture } from 'astro:assets';
 import Pill from './Pill.astro';
 import { site } from '../config/site';
 import type { Content } from '../content';
+import { cardsPorIdioma, type IdiomaCard } from '../content/depoimentos-cards';
 import depoimento1 from '../assets/img/depoimento-1.jpg';
 import depoimento2 from '../assets/img/depoimento-2.jpg';
 import depoimento3 from '../assets/img/depoimento-3.jpg';
 import depoimento4 from '../assets/img/depoimento-4.jpg';
+import mae1 from '../assets/img/mae-1.jpg';
+import mae2 from '../assets/img/mae-2.jpg';
+import mae3 from '../assets/img/mae-3.jpg';
+import mae4 from '../assets/img/mae-4.jpg';
 
 interface Props {
   c: Content['depoimentos'];
 }
 
 const { c } = Astro.props;
+const locale = Astro.currentLocale;
+const mostrarPrints = locale !== 'en' && locale !== 'es' && locale !== 'fr' && locale !== 'it';
+const fotos = [mae1, mae2, mae3, mae4];
+const cards = mostrarPrints ? [] : cardsPorIdioma[locale as IdiomaCard];
 const prints = [
   { src: depoimento1, w: 576, h: 1024 },
   { src: depoimento2, w: 460, h: 1024 },
@@ -31,34 +40,67 @@ const faixas = [0, 1] as const;
       <p>{c.texto}</p>
     </div>
 
-    <div class="marquee" data-defer-marquee>
-      <template>
-      <div class="marquee__track">
-        {faixas.map((faixa) => (
-          <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
-            {prints.map((p, i) => (
-              <li>
-                <div class="phone">
-                  <Picture
-                    src={p.src}
-                    widths={[280, 560]}
-                    sizes="240px"
-                    formats={['avif', 'webp']}
-                    alt={faixa === 1 ? '' : c.alts[i]}
-                    width={p.w}
-                    height={p.h}
-                    loading="eager"
-                    fetchpriority="low"
-                    decoding="async"
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
-        ))}
+    {mostrarPrints ? (
+      <div class="marquee" data-defer-marquee>
+        <template>
+        <div class="marquee__track">
+          {faixas.map((faixa) => (
+            <ul class="marquee__row" aria-hidden={faixa === 1 ? 'true' : undefined}>
+              {prints.map((p, i) => (
+                <li>
+                  <div class="phone">
+                    <Picture
+                      src={p.src}
+                      widths={[280, 560]}
+                      sizes="240px"
+                      formats={['avif', 'webp']}
+                      alt={faixa === 1 ? '' : c.alts[i]}
+                      width={p.w}
+                      height={p.h}
+                      loading="eager"
+                      fetchpriority="low"
+                      decoding="async"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+        </template>
       </div>
-      </template>
-    </div>
+    ) : (
+      <div class="container">
+        <ul class="cards">
+          {cards.map((card, i) => (
+            <li>
+              <figure class="card">
+                <blockquote>
+                  <span class="aspas" aria-hidden="true">“</span>
+                  <p>{card.texto}</p>
+                </blockquote>
+                <figcaption>
+                  <span class="foto">
+                    <Picture
+                      src={fotos[i]}
+                      widths={[144, 288]}
+                      sizes="72px"
+                      formats={['avif', 'webp']}
+                      alt={card.fotoAlt}
+                      width={1024}
+                      height={1024}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                  <span class="nome">{card.nome}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
   </section>
 )}
 
@@ -146,6 +188,78 @@ const faixas = [0, 1] as const;
 
     .marquee__row[aria-hidden='true'] {
       display: none;
+    }
+  }
+
+  .cards {
+    display: grid;
+    gap: 18px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
+    margin: 0;
+    padding: 22px 22px 18px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .card blockquote {
+    margin: 0;
+  }
+
+  .aspas {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--orange);
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 0.7;
+  }
+
+  .card p {
+    color: var(--navy);
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  .card figcaption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .foto {
+    width: 72px;
+    height: 72px;
+    flex: 0 0 72px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .foto :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nome {
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  @media (min-width: 700px) {
+    .cards {
+      grid-template-columns: 1fr 1fr;
     }
   }
 </style>

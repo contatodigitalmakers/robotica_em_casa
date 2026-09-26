@@ -184,8 +184,8 @@ const content = {
   depoimentos: {
     pillEmoji: '❤️',
     pill: 'Témoignages réels de mères qui ont déjà le kit',
-    titulo: 'Ce que les mères disent sur WhatsApp',
-    texto: 'Captures réelles de conversations avec des clientes, publiées avec leur autorisation.',
+    titulo: 'Ce que disent les mères',
+    texto: 'Des mots de mères qui utilisent déjà le kit avec leurs enfants.',
     alts: [
       'Conversation WhatsApp dans laquelle une cliente remercie pour le matériel et raconte que son fils a suivi l’activité',
       'Conversation WhatsApp de Juliana, dont le fils est concentré à construire un projet dans le salon',

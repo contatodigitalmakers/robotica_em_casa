@@ -184,8 +184,8 @@ const content = {
   depoimentos: {
     pillEmoji: '❤️',
     pill: 'Relatos reales de madres que ya tienen el kit',
-    titulo: 'Lo que las madres cuentan por WhatsApp',
-    texto: 'Capturas reales de conversaciones con clientes, publicadas con su autorización.',
+    titulo: 'Lo que cuentan las madres',
+    texto: 'Relatos de madres que ya usan el kit con sus hijos.',
     alts: [
       'Conversación de WhatsApp en la que una clienta agradece el material y cuenta que su hijo siguió la actividad',
       'Conversación de WhatsApp de Juliana, con su hijo concentrado armando un proyecto en la sala',

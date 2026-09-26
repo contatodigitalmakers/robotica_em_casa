@@ -184,8 +184,8 @@ const content = {
   depoimentos: {
     pillEmoji: '❤️',
     pill: 'Real notes from mothers who already have the kit',
-    titulo: 'What mothers are saying on WhatsApp',
-    texto: 'Real screenshots of conversations with customers, published with their permission.',
+    titulo: 'What mothers are saying',
+    texto: 'Notes from mothers who already use the kit with their children.',
     alts: [
       'WhatsApp chat in which a customer thanks them for the materials and says her son followed the activity',
       'WhatsApp chat with Juliana, whose son is focused on building a project in the living room',

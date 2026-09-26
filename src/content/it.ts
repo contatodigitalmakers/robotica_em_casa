@@ -184,8 +184,8 @@ const content = {
   depoimentos: {
     pillEmoji: '❤️',
     pill: 'Racconti veri di mamme che hanno già il kit',
-    titulo: 'Cosa dicono le mamme su WhatsApp',
-    texto: 'Schermate vere di conversazioni con le clienti, pubblicate con la loro autorizzazione.',
+    titulo: 'Cosa dicono le mamme',
+    texto: 'Parole di mamme che usano già il kit con i loro bambini.',
     alts: [
       'Chat WhatsApp in cui una cliente ringrazia per il materiale e racconta che il figlio ha seguito l’attività',
       'Chat WhatsApp di Juliana, con il figlio concentrato a costruire un progetto in salotto',
