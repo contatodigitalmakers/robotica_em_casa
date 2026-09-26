@@ -155,7 +155,6 @@ const precos = { de, percentual: site.jornada.desconto };
           <p>{c.oferta.clique}</p>
           <p class="oferta__exclusivo">{c.oferta.exclusivo}</p>
           <FunilHotmart id="hotmart-sales-funnel-2" />
-          <a class="recusa" href={site.jornada.recusa} rel="noopener">{c.oferta.recusa}</a>
         </article>
       </div>
     </section>
@@ -524,18 +523,6 @@ const precos = { de, percentual: site.jornada.desconto };
   .oferta__exclusivo {
     font-weight: 700;
     color: var(--text);
-  }
-
-  .recusa {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    margin-top: 6px;
-    color: var(--text-muted);
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
 
   .garantia {
