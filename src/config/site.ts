@@ -12,7 +12,7 @@ export const site = {
     nome: 'Klf Education',
     cnpj: 'CONFIRMAR',
     endereco: 'CONFIRMAR',
-    emailSuporte: 'suport@digitalmnakerss.com',
+    emailSuporte: 'jmdigital2026@gmail.com',
   },
   /**
    * Checkouts da Hotmart por idioma.
@@ -55,6 +55,26 @@ export const site = {
     descricao: 'Pais, educadores e apaixonados por infâncias criativas',
   },
   metaPixelId: null as string | null,
+  /** Upsell pós-compra. Checkout e recusa ficam em CONFIRMAR até chegar o link da Hotmart. */
+  jornada: {
+    de: 27.9,
+    por: 9.9,
+    economia: 18,
+    desconto: '64%',
+    garantiaDias: 14,
+    checkout: 'https://pay.hotmart.com/CONFIRMAR',
+    recusa: 'https://pay.hotmart.com/CONFIRMAR',
+  },
+  /** Downsell: mesma Jornada, mais barata, com um ano de acesso. */
+  jornadaDown: {
+    de: 27.9,
+    por: 5.9,
+    economia: 22,
+    desconto: '79%',
+    garantiaDias: 14,
+    checkout: 'https://pay.hotmart.com/CONFIRMAR',
+    recusa: 'https://pay.hotmart.com/CONFIRMAR',
+  },
 };
 
 /** Links de checkout da página. Espanhol tem os próprios; as outras línguas usam o inglês. */

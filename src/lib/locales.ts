@@ -19,6 +19,11 @@ export function pathWithoutLocale(pathname: string): string {
   return stripped.endsWith('/') ? stripped.slice(0, -1) : stripped;
 }
 
+/** Página do funil: português em /up, /down ou /obrigado; os outros com o idioma depois. */
+export function funilHref(base: 'up' | 'down' | 'obrigado', code: string): string {
+  return code === 'pt-br' ? `/${base}` : `/${base}/${code}`;
+}
+
 /** Mesma página no idioma pedido. A versão em português não leva prefixo. */
 export function localeHref(code: string, pathname: string): string {
   const loc = locales.find((l) => l.code === code) ?? locales[0];

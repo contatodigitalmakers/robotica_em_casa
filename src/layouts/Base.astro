@@ -2,25 +2,37 @@
 import '../styles/tokens.css';
 import '../styles/global.css';
 import { site } from '../config/site';
-import { localeHref, localeMeta, locales } from '../lib/locales';
+import { funilHref, localeHref, localeMeta, locales } from '../lib/locales';
 
 interface Props {
   title: string;
   description: string;
   skipLink: string;
+  locale?: string;
+  noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description, skipLink, jsonLd = [] } = Astro.props;
+const { title, description, skipLink, locale, noindex = false, jsonLd = [] } = Astro.props;
 
-const idioma = localeMeta(Astro.currentLocale);
+const idioma = localeMeta(locale ?? Astro.currentLocale);
 const lang = idioma.htmlLang;
 const canonical = new URL(Astro.url.pathname, site.url).href;
+const funil = Astro.url.pathname.startsWith('/up')
+  ? 'up'
+  : Astro.url.pathname.startsWith('/down')
+    ? 'down'
+    : Astro.url.pathname.startsWith('/obrigado')
+      ? 'obrigado'
+      : null;
 const alternates = locales.map((l) => ({
   hreflang: l.hreflang,
-  href: new URL(localeHref(l.code, Astro.url.pathname), site.url).href,
+  href: new URL(funil ? funilHref(funil, l.code) : localeHref(l.code, Astro.url.pathname), site.url).href,
 }));
-const xDefault = new URL(localeHref('pt-br', Astro.url.pathname), site.url).href;
+const xDefault = new URL(
+  funil ? funilHref(funil, 'pt-br') : localeHref('pt-br', Astro.url.pathname),
+  site.url
+).href;
 const ogImage = new URL('/og-image.jpg', site.url).href;
 
 const organization = {
@@ -42,6 +54,7 @@ const organization = {
     <link rel="preload" href="/fonts/nunito-latin-var.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     {alternates.map((alt) => (
       <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />

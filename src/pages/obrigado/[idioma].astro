@@ -1,0 +1,12 @@
+---
+import Obrigado from '../../components/Obrigado.astro';
+import type { LocaleCode } from '../../lib/locales';
+
+export function getStaticPaths() {
+  return (['en', 'es', 'fr', 'it'] as const).map((idioma) => ({ params: { idioma } }));
+}
+
+const idioma = Astro.params.idioma as LocaleCode;
+---
+
+<Obrigado locale={idioma} />

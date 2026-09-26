@@ -1,0 +1,247 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { site } from '../config/site';
+import { getObrigado } from '../content/obrigado';
+import { funilHref, locales, type LocaleCode } from '../lib/locales';
+import logo from '../assets/img/logo.png';
+
+interface Props {
+  locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const c = getObrigado(locale);
+const email = site.empresa.emailSuporte;
+---
+
+<Base title={c.meta.title} description={c.meta.description} skipLink={c.skip} locale={locale} noindex>
+  <p class="confirmacao">
+    <Icon name="check-circle" size={22} />
+    <span>{c.confirmacao}</span>
+  </p>
+
+  <header class="marca">
+    <Picture
+      src={logo}
+      widths={[132, 264]}
+      sizes="120px"
+      formats={['avif', 'webp']}
+      alt={c.marcaAlt}
+      width={1024}
+      height={1024}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </header>
+
+  <main id="conteudo">
+    <section class="hero">
+      <div class="wrap">
+        <h1>{c.titulo}</h1>
+        <p class="sub">{c.texto}</p>
+      </div>
+    </section>
+
+    <section class="bloco passos-secao">
+      <div class="wrap">
+        <h2>{c.passosTitulo}</h2>
+        <ol class="passos">
+          {c.passos.map((passo, i) => (
+            <li>
+              <span class="passos__num">{i + 1}</span>
+              <h3>{passo.titulo}</h3>
+              <p>{passo.texto}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="bloco suporte">
+      <div class="wrap estreito">
+        <p>
+          {c.suportePre}{' '}
+          <a href={`mailto:${email}`}>{email}</a>. {c.suportePos}
+        </p>
+      </div>
+    </section>
+
+    <p class="nota">{c.nota}</p>
+  </main>
+
+  <footer class="idiomas">
+    <nav aria-label={c.idiomas}>
+      {locales.map((l) => (
+        <a href={funilHref('obrigado', l.code)} aria-current={l.code === locale ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+  </footer>
+</Base>
+
+<style>
+  .confirmacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--green-dark);
+    color: var(--white);
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.35;
+  }
+
+  .marca {
+    display: flex;
+    justify-content: center;
+    padding: 18px 16px 8px;
+    background: var(--navy);
+  }
+
+  .marca img {
+    height: 64px;
+    width: auto;
+    border-radius: 12px;
+  }
+
+  .wrap {
+    width: min(100% - 40px, 880px);
+    margin-inline: auto;
+  }
+
+  .estreito {
+    width: min(100% - 40px, 720px);
+  }
+
+  .bloco {
+    padding-block: clamp(32px, 6vw, 56px);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .hero {
+    background: var(--cream);
+    padding-block: clamp(36px, 7vw, 72px) clamp(12px, 3vw, 24px);
+    text-align: center;
+  }
+
+  .sub {
+    color: var(--text-muted);
+    font-size: 1.12rem;
+    max-width: 42ch;
+    margin-inline: auto;
+  }
+
+  .passos-secao {
+    background: var(--white);
+  }
+
+  .passos {
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .passos li {
+    background: var(--cream);
+    border-radius: var(--radius-card);
+    padding: 18px;
+  }
+
+  .passos__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--navy);
+    font-weight: 900;
+    font-size: 1.15rem;
+  }
+
+  .passos h3 {
+    margin-bottom: 6px;
+  }
+
+  .passos p,
+  .suporte p {
+    color: var(--text-muted);
+  }
+
+  .suporte {
+    background: var(--cream);
+    text-align: center;
+  }
+
+  .suporte a {
+    color: var(--navy);
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .nota {
+    width: min(100% - 40px, 720px);
+    margin: 0 auto;
+    padding: 8px 0 28px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+    background: var(--cream);
+  }
+
+  .idiomas {
+    background: var(--navy-3);
+    padding: 22px 16px 28px;
+  }
+
+  .idiomas nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .idiomas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid rgba(245, 241, 232, 0.35);
+    color: var(--text-on-dark);
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .idiomas a[aria-current='page'] {
+    background: var(--yellow);
+    color: var(--navy);
+    border-color: var(--yellow);
+  }
+
+  @media (min-width: 700px) {
+    .passos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

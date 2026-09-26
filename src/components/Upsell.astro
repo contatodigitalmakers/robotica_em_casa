@@ -1,0 +1,680 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import FunilHotmart from './FunilHotmart.astro';
+import Icon from './Icon.astro';
+import { site } from '../config/site';
+import { formatEUR } from '../lib/format';
+import { getJornada } from '../content/jornada';
+import { funilHref, locales, type LocaleCode } from '../lib/locales';
+import logo from '../assets/img/logo.png';
+import capa from '../assets/img/jornada-hero.png';
+
+interface Props {
+  locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const c = getJornada(locale);
+const de = formatEUR(site.jornada.de);
+const por = formatEUR(site.jornada.por);
+const economia = formatEUR(site.jornada.economia);
+const precos = { de, percentual: site.jornada.desconto };
+---
+
+<Base title={c.meta.title} description={c.meta.description} skipLink={c.skip} locale={locale} noindex>
+  <p class="confirmacao">
+    <Icon name="check-circle" size={22} />
+    <span>{c.confirmacao}</span>
+  </p>
+
+  <header class="marca">
+    <Picture
+      src={logo}
+      widths={[132, 264]}
+      sizes="120px"
+      formats={['avif', 'webp']}
+      alt={c.marcaAlt}
+      width={1024}
+      height={1024}
+      loading="eager"
+      decoding="async"
+    />
+  </header>
+
+  <main id="conteudo">
+    <section class="hero">
+      <div class="wrap">
+        <p class="pre">{c.pre}</p>
+        <h1>{c.titulo}</h1>
+        <p class="sub">{c.subtitulo({ de, por })}</p>
+        <figure class="capa">
+          <span class="tape tape--a" aria-hidden="true"></span>
+          <span class="tape tape--b" aria-hidden="true"></span>
+          <Picture
+            src={capa}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 720px) 560px, 92vw"
+            formats={['avif', 'webp']}
+            alt={c.capaAlt}
+            width={1280}
+            height={720}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <section class="bloco problema">
+      <div class="wrap estreito">
+        <h2>{c.problema.titulo}</h2>
+        {c.problema.paragrafos.map((p) => <p>{p}</p>)}
+      </div>
+    </section>
+
+    <section class="bloco solucao">
+      <div class="wrap">
+        <h2>{c.solucao.titulo}</h2>
+        <p class="lead">{c.solucao.intro}</p>
+        <ul class="territorios" role="list">
+          {c.solucao.territorios.map((t) => (
+            <li>
+              <span class="territorios__icone">
+                <Icon name={t.icone} size={26} />
+              </span>
+              <strong>{t.titulo}</strong>
+            </li>
+          ))}
+        </ul>
+        <p class="lead">{c.solucao.fecho}</p>
+      </div>
+    </section>
+
+    <section class="bloco dentro">
+      <div class="wrap estreito">
+        <h2>{c.dentro.titulo}</h2>
+        <ul class="lista" role="list">
+          {c.dentro.itens.map((item) => (
+            <li>
+              <span class="lista__icone">
+                <Icon name="check" size={18} />
+              </span>
+              <span>
+                <strong>{item.titulo}</strong>
+                {item.texto}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="bloco como">
+      <div class="wrap">
+        <h2>{c.como.titulo}</h2>
+        <ol class="passos">
+          {c.como.passos.map((passo, i) => (
+            <li>
+              <span class="passos__num">{i + 1}</span>
+              <p>{passo}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="bloco momento">
+      <div class="wrap estreito">
+        <blockquote>
+          <p class="momento__fala">{c.momento.titulo}</p>
+          <p>{c.momento.texto}</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="bloco porque">
+      <div class="wrap estreito acao">
+        <h2>{c.porque.titulo}</h2>
+        <p>{c.porque.texto({ de })}</p>
+        <FunilHotmart />
+      </div>
+    </section>
+
+    <section class="bloco oferta-secao" id="oferta">
+      <div class="wrap estreito">
+        <article class="oferta">
+          <h2>{c.oferta.nome}</h2>
+          <p class="oferta__de">
+            {c.oferta.deRotulo} <s>{de}</s>
+          </p>
+          <p class="oferta__por">{c.oferta.por({ por })}</p>
+          <p class="oferta__economia">{c.oferta.economia({ valor: economia, percentual: precos.percentual })}</p>
+          <p class="oferta__pagamento">{c.oferta.pagamento}</p>
+          <p>{c.oferta.clique}</p>
+          <p class="oferta__exclusivo">{c.oferta.exclusivo}</p>
+          <FunilHotmart id="hotmart-sales-funnel-2" />
+          <a class="recusa" href={site.jornada.recusa} rel="noopener">{c.oferta.recusa}</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="bloco garantia">
+      <div class="wrap estreito garantia__caixa">
+        <Icon name="shield" size={36} />
+        <p>{c.garantia({ dias: site.jornada.garantiaDias })}</p>
+      </div>
+    </section>
+
+    <section class="bloco faq" aria-labelledby="t-faq-jornada">
+      <div class="wrap estreito">
+        <h2 id="t-faq-jornada">{c.faq.titulo}</h2>
+        <div class="faq__lista">
+          {c.faq.itens.map((item) => (
+            <details>
+              <summary>
+                <span>{item.q}</span>
+                <span class="faq__plus" aria-hidden="true"></span>
+              </summary>
+              <p>{item.a({ de })}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <p class="nota">{c.nota}</p>
+  </main>
+
+  <footer class="idiomas">
+    <nav aria-label={c.idiomas}>
+      {locales.map((l) => (
+        <a href={funilHref('up', l.code)} aria-current={l.code === locale ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+  </footer>
+
+  <script is:inline src="https://checkout.hotmart.com/lib/hotmart-checkout-elements.js"></script>
+  <script is:inline>
+    checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')
+    checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel-2')
+  </script>
+</Base>
+
+<style>
+  .confirmacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--green-dark);
+    color: var(--white);
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.35;
+  }
+
+  .marca {
+    display: flex;
+    justify-content: center;
+    padding: 18px 16px 8px;
+    background: var(--navy);
+  }
+
+  .marca img {
+    height: 64px;
+    width: auto;
+    border-radius: 12px;
+  }
+
+  .wrap {
+    width: min(100% - 40px, 880px);
+    margin-inline: auto;
+  }
+
+  .estreito {
+    width: min(100% - 40px, 720px);
+  }
+
+  .bloco {
+    padding-block: clamp(40px, 7vw, 72px);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.3rem);
+    line-height: 1.05;
+    margin: 12px 0 16px;
+  }
+
+  h2 {
+    font-size: clamp(1.55rem, 4vw, 2.2rem);
+    margin-bottom: 16px;
+  }
+
+  .hero {
+    background: var(--cream);
+    padding-block: clamp(28px, 5vw, 56px) clamp(8px, 2vw, 20px);
+    text-align: center;
+  }
+
+  .pre {
+    display: inline-block;
+    background: var(--yellow-tint);
+    color: var(--navy);
+    font-weight: 800;
+    border-radius: var(--radius-pill);
+    padding: 8px 14px;
+  }
+
+  .sub {
+    color: var(--text-muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin-inline: auto;
+  }
+
+  .capa {
+    position: relative;
+    margin: 28px auto 0;
+    max-width: 560px;
+    transform: rotate(-1deg);
+  }
+
+  .capa img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-img);
+    box-shadow: var(--shadow-lift);
+    background: var(--white);
+  }
+
+  .tape--a {
+    top: -12px;
+    left: 12%;
+    rotate: -8deg;
+    --tape-color: var(--yellow);
+  }
+
+  .tape--b {
+    right: 10%;
+    bottom: -12px;
+    rotate: 7deg;
+    --tape-color: var(--pink);
+  }
+
+  .problema {
+    background: var(--white);
+  }
+
+  .problema p + p,
+  .solucao .lead + .territorios,
+  .momento p + p {
+    margin-top: 14px;
+  }
+
+  .problema p,
+  .lead,
+  .porque p,
+  .oferta p,
+  .garantia p,
+  .momento p {
+    color: var(--text-muted);
+  }
+
+  .solucao {
+    background: var(--navy);
+    color: var(--text-on-dark);
+  }
+
+  .solucao .lead,
+  .solucao h2 {
+    color: var(--text-on-dark);
+  }
+
+  .solucao .lead {
+    color: var(--text-on-dark-muted);
+  }
+
+  .territorios {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+    margin: 22px 0;
+  }
+
+  .territorios li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--navy-2);
+    border-radius: 18px;
+    padding: 14px 16px;
+    font-size: 1.05rem;
+  }
+
+  .territorios__icone {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--yellow);
+    color: var(--navy);
+    flex: 0 0 auto;
+  }
+
+  .dentro {
+    background: var(--cream);
+  }
+
+  .lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lista li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--white);
+    border-radius: 18px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .lista strong {
+    display: block;
+  }
+
+  .lista__icone {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--green-tint);
+    color: var(--green-dark);
+    flex: 0 0 auto;
+    margin-top: 2px;
+  }
+
+  .como {
+    background: var(--cream-2);
+  }
+
+  .passos {
+    list-style: none;
+    display: grid;
+    gap: 14px;
+    counter-reset: none;
+  }
+
+  .passos li {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 18px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .passos__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--navy);
+    font-weight: 900;
+    font-size: 1.15rem;
+  }
+
+  .passos p {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .momento {
+    background: var(--white);
+  }
+
+  blockquote {
+    background: var(--yellow-tint);
+    border-radius: var(--radius-card);
+    padding: clamp(22px, 4vw, 36px);
+  }
+
+  .momento__fala {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+
+  .porque {
+    background: var(--cream);
+    text-align: center;
+  }
+
+  .acao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .acao h2,
+  .acao p {
+    width: 100%;
+  }
+
+  .oferta-secao {
+    background: var(--cream);
+    padding-top: 0;
+  }
+
+  .oferta {
+    background: var(--white);
+    border: 3px solid var(--yellow);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lift);
+    padding: clamp(22px, 4vw, 40px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .oferta h2 {
+    margin-bottom: 4px;
+  }
+
+  .oferta__de {
+    font-weight: 800;
+  }
+
+  .oferta__de s {
+    font-size: 1.35rem;
+    color: var(--text-muted);
+  }
+
+  .oferta__por {
+    font-size: clamp(2.2rem, 7vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--navy);
+  }
+
+  .oferta__economia {
+    color: var(--green-dark);
+    font-weight: 800;
+  }
+
+  .oferta__pagamento,
+  .oferta__exclusivo {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .recusa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .garantia {
+    background: var(--white);
+  }
+
+  .garantia__caixa {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--green-card);
+    color: var(--green-dark);
+    border-radius: var(--radius-card);
+    padding: 20px;
+  }
+
+  .garantia__caixa p {
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  .faq {
+    background: var(--cream);
+  }
+
+  .faq__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  details {
+    background: var(--white);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    min-height: 44px;
+    font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__plus {
+    position: relative;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--yellow-tint);
+  }
+
+  .faq__plus::before,
+  .faq__plus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--navy);
+    translate: -50% -50%;
+  }
+
+  .faq__plus::after {
+    rotate: 90deg;
+  }
+
+  details[open] .faq__plus {
+    rotate: 45deg;
+  }
+
+  details p {
+    padding: 0 22px 18px;
+    color: var(--text-muted);
+  }
+
+  .nota {
+    width: min(100% - 40px, 720px);
+    margin: 0 auto;
+    padding-bottom: 28px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .idiomas {
+    background: var(--navy-3);
+    padding: 22px 16px 28px;
+  }
+
+  .idiomas nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .idiomas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid rgba(245, 241, 232, 0.35);
+    color: var(--text-on-dark);
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .idiomas a[aria-current='page'] {
+    background: var(--yellow);
+    color: var(--navy);
+    border-color: var(--yellow);
+  }
+
+  :global(.funil-hotmart) {
+    width: 100%;
+  }
+
+  @media (min-width: 700px) {
+    .territorios {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .passos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

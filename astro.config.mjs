@@ -17,5 +17,19 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        return (
+          path !== '/up' &&
+          !path.startsWith('/up/') &&
+          path !== '/down' &&
+          !path.startsWith('/down/') &&
+          path !== '/obrigado' &&
+          !path.startsWith('/obrigado/')
+        );
+      },
+    }),
+  ],
 });
