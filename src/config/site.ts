@@ -14,10 +14,22 @@ export const site = {
     endereco: 'CONFIRMAR',
     emailSuporte: 'suport@digitalmnakerss.com',
   },
+  /**
+   * Checkouts da Hotmart por idioma.
+   * es tem página própria. pt-br, fr e it usam os links de en até terem os seus.
+   * mirim = oferta de 9,90 · megaDesconto = 19 · mega = 29.
+   */
   checkout: {
-    mirim: 'https://pay.hotmart.com/CONFIRMAR',
-    mega: 'https://pay.hotmart.com/CONFIRMAR',
-    megaDesconto: 'https://pay.hotmart.com/CONFIRMAR',
+    en: {
+      mirim: 'https://pay.hotmart.com/R107767862M?off=30dy9et1&checkoutMode=10',
+      megaDesconto: 'https://pay.hotmart.com/R107767862M?off=qhpe1r8k&checkoutMode=10',
+      mega: 'https://pay.hotmart.com/R107767862M?off=5j8dl14m&checkoutMode=10',
+    },
+    es: {
+      mirim: 'https://pay.hotmart.com/H107767964Q?off=0bf42m4r&checkoutMode=10',
+      megaDesconto: 'https://pay.hotmart.com/H107767964Q?off=hn6mgttu&checkoutMode=10',
+      mega: 'https://pay.hotmart.com/H107767964Q?off=t8sc9j81&checkoutMode=10',
+    },
   },
   precos: {
     mirim: { atual: 9.9, anteriorReal: null as number | null },
@@ -44,3 +56,8 @@ export const site = {
   },
   metaPixelId: null as string | null,
 };
+
+/** Links de checkout da página. Espanhol tem os próprios; as outras línguas usam o inglês. */
+export function checkoutDo(locale?: string) {
+  return locale === 'es' ? site.checkout.es : site.checkout.en;
+}

@@ -360,7 +360,6 @@ const content = {
   },
 
   sticky: {
-    // preço interpolado do config no componente
     produto: 'Kit Mega Inventor',
     cta: 'Quero o kit',
   },

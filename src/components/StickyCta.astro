@@ -1,6 +1,4 @@
 ---
-import { site } from '../config/site';
-import { formatEUR } from '../lib/format';
 import type { Content } from '../content';
 
 interface Props {
@@ -8,15 +6,13 @@ interface Props {
 }
 
 const { c } = Astro.props;
-const locale = Astro.currentLocale;
 ---
 
 <div class="sticky-cta" data-sticky hidden>
   <p class="sticky-cta__info">
     <strong>{c.produto}</strong>
-    <span>{formatEUR(site.precos.mega.atual, locale)}</span>
   </p>
-  <a href={site.checkout.mega} class="sticky-cta__btn" data-checkout rel="noopener">{c.cta}</a>
+  <a href="#ofertas" class="sticky-cta__btn">{c.cta}</a>
 </div>
 
 <script>
@@ -58,14 +54,8 @@ const locale = Astro.currentLocale;
   }
 
   .sticky-cta__info strong {
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     font-weight: 800;
-  }
-
-  .sticky-cta__info span {
-    font-size: 1.05rem;
-    font-weight: 900;
-    color: var(--orange-dark);
   }
 
   .sticky-cta__btn {

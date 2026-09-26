@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import Pill from './Pill.astro';
 import OfertaCard from './OfertaCard.astro';
 import Icon from './Icon.astro';
-import { site } from '../config/site';
+import { checkoutDo, site } from '../config/site';
 import { formatEUR } from '../lib/format';
 import type { Content } from '../content';
 import mockupMega from '../assets/img/mockup-mega.png';
@@ -18,6 +18,7 @@ interface Props {
 
 const { c } = Astro.props;
 const locale = Astro.currentLocale;
+const checkout = checkoutDo(locale);
 const capasMega = { en: mockupMegaEn, fr: mockupMegaFr, es: mockupMegaEs, it: mockupMegaIt };
 const mockup =
   (locale && locale in capasMega ? capasMega[locale as keyof typeof capasMega] : undefined) ?? mockupMega;
@@ -70,11 +71,11 @@ const mockup =
       <s>{formatEUR(site.precos.mega.atual, locale)}</s>
       <strong>{formatEUR(site.precos.megaDesconto.atual, locale)}</strong>
     </p>
-    <a class="upsell__aceitar" href={site.checkout.megaDesconto} data-checkout rel="noopener">
+    <a class="upsell__aceitar" href={checkout.megaDesconto} data-checkout rel="noopener">
       <Icon name="check" size={20} />
       {c.upsell.aceitar}
     </a>
-    <a class="upsell__recusar" href={site.checkout.mirim} data-checkout rel="noopener">{c.upsell.recusar}</a>
+    <a class="upsell__recusar" href={checkout.mirim} data-checkout rel="noopener">{c.upsell.recusar}</a>
 </dialog>
 
 <script>

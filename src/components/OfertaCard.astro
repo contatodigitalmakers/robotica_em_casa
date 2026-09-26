@@ -2,7 +2,7 @@
 import { Picture } from 'astro:assets';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
-import { site } from '../config/site';
+import { checkoutDo, site } from '../config/site';
 import { formatEUR } from '../lib/format';
 import type { Content } from '../content';
 import mockupMirim from '../assets/img/mockup-mirim.png';
@@ -25,7 +25,7 @@ const { variante, c } = Astro.props;
 const locale = Astro.currentLocale;
 const dados = variante === 'mirim' ? c.mirim : c.mega;
 const preco = site.precos[variante];
-const checkout = site.checkout[variante];
+const checkout = checkoutDo(locale)[variante];
 const capasMirim = { en: mockupMirimEn, fr: mockupMirimFr, es: mockupMirimEs, it: mockupMirimIt };
 const capasMega = { en: mockupMegaEn, fr: mockupMegaFr, es: mockupMegaEs, it: mockupMegaIt };
 const capas = variante === 'mirim' ? capasMirim : capasMega;
