@@ -248,7 +248,6 @@ const content = {
     confianca: [
       '🔒 Paiement sécurisé · Traité par Hotmart · Pix (paiement instantané brésilien), carte bancaire ou boleto (titre de paiement brésilien). Les prix sont en euros.',
       'L’accès est envoyé par e-mail dès la confirmation du paiement.',
-      '⚠️ Produit numérique (PDF à imprimer). Aucun envoi physique.',
       'Les activités doivent toujours se faire sous la surveillance d’un adulte.',
     ],
   },
@@ -259,6 +258,22 @@ const content = {
     titulo: `Garantie inconditionnelle de ${g} jours`,
     texto: `Si dans les ${g} jours le kit ne vous convient pas, pour n’importe quelle raison, nous remboursons 100 %. La demande se fait directement sur Hotmart, sans questions ni paperasse. C’est aussi votre droit de rétractation, prévu par le Code brésilien de la consommation.`,
     escudoAlt: '',
+  },
+
+  bonus: {
+    pillEmoji: '🎁',
+    pill: 'Bonus spécial',
+    tituloPre: 'Qui achète le kit participe à un tirage pour un ',
+    tituloDestaque: 'kit de jouets éducatifs',
+    tituloPos: '',
+    texto: `Chaque acheteur participe à un tirage hebdomadaire pour un kit de plus de ${site.bonus.valor} euros de jouets qui aident l’enfant à apprendre loin des écrans.`,
+    imagemAlt: 'Kit de jouets éducatifs avec des blocs de construction, un puzzle en bois, des lettres et des chiffres en bois et un petit kit de sciences',
+    pontos: [
+      { titulo: 'Tirage chaque semaine', texto: 'Acheter le kit vous inscrit déjà.' },
+      { titulo: `Plus de ${site.bonus.valor} euros`, texto: 'en jouets éducatifs pour l’enfant.' },
+      { titulo: 'Loin des écrans', texto: 'des jouets qui apprennent en jouant.' },
+    ],
+    cta: 'Je veux participer →',
   },
 
   lancamento: {

@@ -260,7 +260,6 @@ const content = {
     confianca: [
       '🔒 Compra 100% segura · Pagamento processado pela Hotmart · Pix, cartão ou boleto',
       'Acesso liberado por e-mail logo após a confirmação do pagamento.',
-      '⚠️ Produto digital (PDFs para imprimir). Nenhum item físico é enviado.',
       'As atividades devem ser feitas sempre com supervisão de um adulto.',
     ],
   },
@@ -271,6 +270,22 @@ const content = {
     titulo: `Garantia incondicional de ${g} dias`,
     texto: `Se em até ${g} dias você não ficar satisfeito com o seu kit, por qualquer motivo, devolvemos 100% do seu dinheiro. É só pedir o reembolso direto pela Hotmart, sem perguntas e sem burocracia. Esse também é o seu direito de arrependimento, garantido pelo Código de Defesa do Consumidor.`,
     escudoAlt: '', // decorativo
+  },
+
+  bonus: {
+    pillEmoji: '🎁',
+    pill: 'Bônus especial',
+    tituloPre: 'Quem compra o kit concorre a um ',
+    tituloDestaque: 'kit de brinquedos educativos',
+    tituloPos: '',
+    texto: `Todo comprador entra num sorteio semanal de um kit com mais de ${site.bonus.valor} euros em brinquedos que ajudam a criança a aprender longe das telas.`,
+    imagemAlt: 'Kit de brinquedos educativos com blocos de montar, quebra-cabeça, letras e números de madeira e um pequeno kit de ciência',
+    pontos: [
+      { titulo: 'Sorteio toda semana', texto: 'Quem compra já está participando.' },
+      { titulo: `Mais de ${site.bonus.valor} euros`, texto: 'em brinquedos educativos para a criança.' },
+      { titulo: 'Longe das telas', texto: 'brinquedos que ensinam brincando.' },
+    ],
+    cta: 'Quero participar →',
   },
 
   lancamento: {

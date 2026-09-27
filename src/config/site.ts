@@ -50,6 +50,10 @@ export const site = {
     anosDesenvolvimento: null as number | null,
   },
   depoimentos: { ativo: true },
+  bonus: {
+    valor: 250,
+    frequencia: 'semanal',
+  },
   fundadores: {
     nomes: 'CONFIRMAR',
     descricao: 'Pais, educadores e apaixonados por infâncias criativas',

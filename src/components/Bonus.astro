@@ -1,0 +1,133 @@
+---
+import { Picture } from 'astro:assets';
+import Pill from './Pill.astro';
+import Button from './Button.astro';
+import type { Content } from '../content';
+import bonusKit from '../assets/img/bonus-kit.jpg';
+
+interface Props {
+  c: Content['bonus'];
+}
+
+const { c } = Astro.props;
+---
+
+<section class="section bonus cv" id="bonus" aria-labelledby="t-bonus">
+  <div class="container bonus__inner">
+    <figure class="bonus__foto">
+      <Picture
+        src={bonusKit}
+        widths={[420, 840]}
+        sizes="(min-width: 900px) 420px, 88vw"
+        formats={['avif', 'webp']}
+        alt={c.imagemAlt}
+        width={1152}
+        height={864}
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+
+    <div class="bonus__textos">
+      <Pill emoji={c.pillEmoji} label={c.pill} tone="orange" />
+      <h2 id="t-bonus">
+        {c.tituloPre}<span class="hl hl--yellow">{c.tituloDestaque}</span>{c.tituloPos}
+      </h2>
+      <p class="bonus__texto">{c.texto}</p>
+
+      <ul class="bonus__pontos" role="list">
+        {c.pontos.map((p) => (
+          <li>
+            <strong>{p.titulo}</strong>
+            <span>{p.texto}</span>
+          </li>
+        ))}
+      </ul>
+
+      <Button href="#ofertas" label={c.cta} size="lg" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .bonus {
+    background: var(--cream-2);
+  }
+
+  .bonus__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .bonus__foto {
+    margin: 0;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-lift);
+  }
+
+  .bonus__foto img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .bonus__textos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .bonus__texto {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .bonus__pontos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bonus__pontos li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 16px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .bonus__pontos strong {
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  .bonus__pontos span {
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  @media (min-width: 900px) {
+    .bonus__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 44px;
+    }
+
+    .bonus__foto {
+      flex: 0 0 420px;
+    }
+
+    .bonus__textos {
+      flex: 1;
+    }
+  }
+</style>

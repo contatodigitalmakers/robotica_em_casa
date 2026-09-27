@@ -247,7 +247,6 @@ const content = {
     confianca: [
       '🔒 Secure checkout · Payment processed by Hotmart · Pix (Brazil’s instant payment), card, or boleto (a Brazilian bank slip). Prices are in euros.',
       'Access is sent by email as soon as the payment is confirmed.',
-      '⚠️ Digital product (PDFs to print). Nothing physical is shipped.',
       'Activities should always be done with an adult nearby.',
     ],
   },
@@ -258,6 +257,22 @@ const content = {
     titulo: `Unconditional ${g}-day guarantee`,
     texto: `If within ${g} days you are not happy with your kit, for any reason, we refund 100%. Request it directly through Hotmart, with no questions and no paperwork. This is also your right to cancel under Brazil’s Consumer Protection Code.`,
     escudoAlt: '',
+  },
+
+  bonus: {
+    pillEmoji: '🎁',
+    pill: 'Special bonus',
+    tituloPre: 'Everyone who buys the kit enters a draw for an ',
+    tituloDestaque: 'educational toy kit',
+    tituloPos: '',
+    texto: `Every buyer enters a weekly draw for a kit with more than €${site.bonus.valor} in toys that help children learn away from screens.`,
+    imagemAlt: 'Educational toy kit with building blocks, a wooden puzzle, wooden letters and numbers and a small science kit',
+    pontos: [
+      { titulo: 'Draw every week', texto: 'Buying the kit already puts you in.' },
+      { titulo: `More than €${site.bonus.valor}`, texto: 'in educational toys for the child.' },
+      { titulo: 'Away from screens', texto: 'toys that teach through play.' },
+    ],
+    cta: 'I want to take part →',
   },
 
   lancamento: {

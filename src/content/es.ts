@@ -248,7 +248,6 @@ const content = {
     confianca: [
       '🔒 Compra segura · El pago lo procesa Hotmart · Pix (pago instantáneo de Brasil), tarjeta o boleto (comprobante bancario brasileño). Los precios están en euros.',
       'El acceso llega por correo en cuanto se confirma el pago.',
-      '⚠️ Producto digital (PDF para imprimir). No se envía nada físico.',
       'Las actividades deben hacerse siempre con un adulto cerca.',
     ],
   },
@@ -259,6 +258,22 @@ const content = {
     titulo: `Garantía incondicional de ${g} días`,
     texto: `Si en un plazo de ${g} días el kit no les convence, por el motivo que sea, devolvemos el 100 %. Lo piden directo en Hotmart, sin preguntas ni trámites. También es su derecho de arrepentimiento, previsto por el Código de Defensa del Consumidor de Brasil.`,
     escudoAlt: '',
+  },
+
+  bonus: {
+    pillEmoji: '🎁',
+    pill: 'Bono especial',
+    tituloPre: 'Quien compra el kit participa en un sorteo de un ',
+    tituloDestaque: 'kit de juguetes educativos',
+    tituloPos: '',
+    texto: `Cada comprador entra en un sorteo semanal de un kit con más de ${site.bonus.valor} euros en juguetes que ayudan al niño a aprender lejos de las pantallas.`,
+    imagemAlt: 'Kit de juguetes educativos con bloques de construcción, un rompecabezas de madera, letras y números de madera y un pequeño kit de ciencia',
+    pontos: [
+      { titulo: 'Sorteo cada semana', texto: 'Quien compra ya está participando.' },
+      { titulo: `Más de ${site.bonus.valor} euros`, texto: 'en juguetes educativos para el niño.' },
+      { titulo: 'Lejos de las pantallas', texto: 'juguetes que enseñan jugando.' },
+    ],
+    cta: 'Quiero participar →',
   },
 
   lancamento: {
